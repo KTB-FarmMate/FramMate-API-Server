@@ -28,8 +28,10 @@ public class ChatRoom {
 	private Member member;
 
 	private LocalDateTime createdAt;
-	
+
 	private LocalDateTime updatedAt;
 
 	private Boolean isGrowing;
+
+	private String address;
 }
