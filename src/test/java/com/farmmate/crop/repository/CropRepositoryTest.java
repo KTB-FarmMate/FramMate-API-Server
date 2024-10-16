@@ -26,7 +26,7 @@ class CropRepositoryTest {
 		List<Crop> crops = new ArrayList<>();
 
 		for (int i = 0; i < names.length; i++) {
-			Crop crop = Crop.of(i + 1L, names[i]);
+			Crop crop = Crop.of(i + 1, names[i]);
 
 			crops.add(crop);
 		}
@@ -40,7 +40,7 @@ class CropRepositoryTest {
 
 		// ID 검증
 		assertThat(savedCrops).extracting(Crop::getId)
-			.containsExactlyInAnyOrder(1L, 2L, 3L); // 저장된 작물의 ID 검증
+			.containsExactlyInAnyOrder(1, 2, 3); // 저장된 작물의 ID 검증
 
 		// 이름 검증
 		assertThat(savedCrops).extracting(Crop::getName)

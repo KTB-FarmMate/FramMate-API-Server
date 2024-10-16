@@ -6,9 +6,14 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.response.ChatRoomRegistrationResponse;
 import com.farmmate.chatroom.entity.ChatRoom;
 import com.farmmate.chatroom.repository.ChatRoomRepository;
+import com.farmmate.crop.entity.Crop;
+import com.farmmate.crop.repository.CropRepository;
+import com.farmmate.member.entity.Member;
+import com.farmmate.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class ChatRoomService {
 	private final ChatRoomRepository chatRoomRepository;
+	private final MemberRepository memberRepository;
+	private final CropRepository cropRepository;
 
 	@Transactional(readOnly = true)
 	public List<ChatRoomRegistrationResponse> findRegsisteredChatRooms(String memberId) {

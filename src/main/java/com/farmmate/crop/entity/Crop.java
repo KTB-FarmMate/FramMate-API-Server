@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Crop {
 	@Id
-	Long id;
-	String name;
+	private Integer id;
+	private String name;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private Crop(Long id, String name) {
+	private Crop(Integer id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public static Crop of(Long id, String name) {
+	public static Crop of(Integer id, String name) {
 		return Crop.builder()
 			.id(id)
 			.name(name)
