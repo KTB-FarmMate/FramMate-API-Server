@@ -26,4 +26,12 @@ public class ChatRoomController {
 	public List<ChatRoomRegistrationResponse> findChatRooms(@PathVariable String memberId) {
 		return chatRoomService.findRegsisteredChatRooms(memberId);
 	}
+
+	@PostMapping("{memberId}/chat-rooms/{cropId}")
+	public ResponseEntity<Void> registerChatRoom(@PathVariable String memberId, @PathVariable Integer cropId,
+		@RequestBody ChatRoomRegistrationRequest request) {
+		chatRoomService.registerChatRoom(memberId, cropId, request);
+
+		return ResponseEntity.created(null).build();
+	}
 }

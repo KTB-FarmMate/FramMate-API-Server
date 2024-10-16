@@ -33,4 +33,20 @@ public class ChatRoomService {
 			.map(ChatRoomRegistrationResponse::from)
 			.collect(Collectors.toUnmodifiableList());
 	}
+
+	public void registerChatRoom(String memberId, Integer cropId, ChatRoomRegistrationRequest request) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+		Crop crop = cropRepository.findById(cropId)
+			.orElseThrow(() -> new IllegalArgumentException("Crop not found"));
+
+		if (chatRoomRepository.existsByMemberAndCrop(member, crop)) {
+			throw new IllegalArgumentException("ChatRoom already exists");
+		}
+
+		ChatRoom chatRoom = ChatRoom.create(crop, member, request);
+
+		chatRoomRepository.save(chatRoom);
+	}
 }
