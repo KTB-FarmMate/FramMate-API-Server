@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: farmmate
+  profiles:
+    group:
+      local: local
+    default: local
+
