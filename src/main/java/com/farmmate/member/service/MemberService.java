@@ -16,7 +16,7 @@ public class MemberService {
 	private final MemberRepository memberRepository;
 
 	public MemberRegisterResponse register() {
-		Member newMember = new Member();
+		Member newMember = Member.create();
 
 		// Save new member to database
 		Member savedMember = memberRepository.save(newMember);
