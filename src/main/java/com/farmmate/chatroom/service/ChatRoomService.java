@@ -49,4 +49,18 @@ public class ChatRoomService {
 
 		chatRoomRepository.save(chatRoom);
 	}
+
+	public void unregisterChatRoom(String memberId, Integer chatRoomId) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+		ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+			.orElseThrow(() -> new IllegalArgumentException("ChatRoom not found"));
+
+		if (!chatRoom.getMember().equals(member)) {
+			throw new IllegalArgumentException("ChatRoom does not belong to the member");
+		}
+
+		chatRoomRepository.delete(chatRoom);
+	}
 }

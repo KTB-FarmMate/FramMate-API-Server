@@ -3,6 +3,7 @@ package com.farmmate.chatroom.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,5 +34,12 @@ public class ChatRoomController {
 		chatRoomService.registerChatRoom(memberId, cropId, request);
 
 		return ResponseEntity.created(null).build();
+	}
+
+	@DeleteMapping("{memberId}/chat-rooms/{chatRoomId}")
+	public ResponseEntity<Void> unregisterChatRoom(@PathVariable String memberId, @PathVariable Integer chatRoomId) {
+		chatRoomService.unregisterChatRoom(memberId, chatRoomId);
+
+		return ResponseEntity.noContent().build();
 	}
 }
