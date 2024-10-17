@@ -1,0 +1,11 @@
+spring:
+  config:
+    activate:
+      on-profile: external
+
+# 기상청 api key
+weather-station:
+  apikey: ${WEATHER_STATION_API_KEY}
+kakao:
+  local:
+    apikey: ${KAKAO_LOCAL_API_KEY}
