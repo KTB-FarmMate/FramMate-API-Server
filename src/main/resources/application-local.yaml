@@ -34,4 +34,11 @@ spring:
         mode: always
 #        schema-locations: classpath:/db/data.sql # 스키마 생성 SQL 파일 위치
 #        data-locations: classpath:/db/data.sql    # 데이터 생성 SQL 파일 위치
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: trace
 
