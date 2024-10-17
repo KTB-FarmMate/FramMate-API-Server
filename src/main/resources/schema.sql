@@ -13,7 +13,7 @@ CREATE TABLE `chat_room`
 (
     `id`         CHAR(31)     NOT NULL,
     `member_id`  CHAR(36)     NOT NULL,
-    `crop_id`    INT UNSIGNED NOT NULL,
+    `crop_id`    INT          NOT NULL,
     `created_at` DATETIME(6)  NULL,
     `updated_at` DATETIME(6)  NULL,
     `is_growing` BIT(1)       NULL,
