@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
-import com.farmmate.chatroom.dto.response.ChatRoomRegistrationResponse;
+import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
+import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
 import com.farmmate.chatroom.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,20 +25,21 @@ public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
 
 	@GetMapping("{memberId}/chat-rooms")
-	public List<ChatRoomRegistrationResponse> findChatRooms(@PathVariable String memberId) {
-		return chatRoomService.findRegsisteredChatRooms(memberId);
+	public List<RegisteredThreadFindResponse> findChatRooms(@PathVariable String memberId) {
+		return chatRoomService.findRegisteredChatRooms(memberId);
 	}
 
 	@PostMapping("{memberId}/chat-rooms/{cropId}")
-	public ResponseEntity<Void> registerChatRoom(@PathVariable String memberId, @PathVariable Integer cropId,
+	public ResponseEntity<ThreadRegisterResponse> registerChatRoom(@PathVariable String memberId,
+		@PathVariable Integer cropId,
 		@RequestBody ChatRoomRegistrationRequest request) {
-		chatRoomService.registerChatRoom(memberId, cropId, request);
+		ThreadRegisterResponse response = chatRoomService.registerChatRoom(memberId, cropId, request);
 
-		return ResponseEntity.created(null).build();
+		return ResponseEntity.created(null).body(response);
 	}
 
 	@DeleteMapping("{memberId}/chat-rooms/{chatRoomId}")
-	public ResponseEntity<Void> unregisterChatRoom(@PathVariable String memberId, @PathVariable Integer chatRoomId) {
+	public ResponseEntity<Void> unregisterChatRoom(@PathVariable String memberId, @PathVariable String chatRoomId) {
 		chatRoomService.unregisterChatRoom(memberId, chatRoomId);
 
 		return ResponseEntity.noContent().build();

@@ -6,10 +6,9 @@ import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.member.entity.Member;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -23,8 +22,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoom {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer Id;
+	@Column(columnDefinition = "char(36)")
+	private String id;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	private Crop crop;
@@ -41,7 +40,8 @@ public class ChatRoom {
 	private String address;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private ChatRoom(Crop crop, Member member, Boolean isGrowing, String address) {
+	private ChatRoom(String id, Crop crop, Member member, Boolean isGrowing, String address) {
+		this.id = id;
 		this.crop = crop;
 		this.member = member;
 		this.isGrowing = isGrowing;
@@ -52,6 +52,7 @@ public class ChatRoom {
 
 	public static ChatRoom create(Crop crop, Member member, ChatRoomRegistrationRequest request) {
 		return ChatRoom.builder()
+			.id(request.threadId())
 			.crop(crop)
 			.member(member)
 			.isGrowing(true)

@@ -8,7 +8,7 @@ import com.farmmate.chatroom.entity.ChatRoom;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.member.entity.Member;
 
-public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
+public interface ChatRoomRepository extends JpaRepository<ChatRoom, String> {
 
 	List<ChatRoom> findAllByMemberId(String memberId);
 

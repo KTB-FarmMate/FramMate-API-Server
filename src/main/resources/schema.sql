@@ -11,7 +11,7 @@ CREATE TABLE `crop`
 
 CREATE TABLE `chat_room`
 (
-    `id`         INT          NOT NULL AUTO_INCREMENT,
+    `id`         CHAR(31)     NOT NULL,
     `member_id`  CHAR(36)     NOT NULL,
     `crop_id`    INT UNSIGNED NOT NULL,
     `created_at` DATETIME(6)  NULL,

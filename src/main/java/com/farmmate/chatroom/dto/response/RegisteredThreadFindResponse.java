@@ -6,9 +6,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 
 @Builder(access = AccessLevel.PRIVATE)
-public record ChatRoomRegistrationResponse(Integer cropId, String cropName, Integer chatRoomId) {
-	public static ChatRoomRegistrationResponse from(ChatRoom chatRoom) {
-		return ChatRoomRegistrationResponse.builder()
+public record RegisteredThreadFindResponse(Integer cropId, String cropName, String chatRoomId) {
+	public static RegisteredThreadFindResponse from(ChatRoom chatRoom) {
+		return RegisteredThreadFindResponse.builder()
 			.cropId(chatRoom.getCrop().getId())
 			.cropName(chatRoom.getCrop().getName())
 			.chatRoomId(chatRoom.getId())

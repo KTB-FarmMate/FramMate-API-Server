@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
-import com.farmmate.chatroom.dto.response.ChatRoomRegistrationResponse;
+import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
+import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
 import com.farmmate.chatroom.entity.ChatRoom;
 import com.farmmate.chatroom.repository.ChatRoomRepository;
 import com.farmmate.crop.entity.Crop;
@@ -26,15 +27,16 @@ public class ChatRoomService {
 	private final CropRepository cropRepository;
 
 	@Transactional(readOnly = true)
-	public List<ChatRoomRegistrationResponse> findRegsisteredChatRooms(String memberId) {
+	public List<RegisteredThreadFindResponse> findRegisteredChatRooms(String memberId) {
 		List<ChatRoom> chatRooms = chatRoomRepository.findAllByMemberId(memberId);
 
 		return chatRooms.stream()
-			.map(ChatRoomRegistrationResponse::from)
+			.map(RegisteredThreadFindResponse::from)
 			.collect(Collectors.toUnmodifiableList());
 	}
 
-	public void registerChatRoom(String memberId, Integer cropId, ChatRoomRegistrationRequest request) {
+	public ThreadRegisterResponse registerChatRoom(String memberId, Integer cropId,
+		ChatRoomRegistrationRequest request) {
 		Member member = memberRepository.findById(memberId)
 			.orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
@@ -45,12 +47,13 @@ public class ChatRoomService {
 			throw new IllegalArgumentException("ChatRoom already exists");
 		}
 
-		ChatRoom chatRoom = ChatRoom.create(crop, member, request);
+		ChatRoom newChatRoom = ChatRoom.create(crop, member, request);
+		ChatRoom savedChatRoom = chatRoomRepository.save(newChatRoom);
 
-		chatRoomRepository.save(chatRoom);
+		return ThreadRegisterResponse.from(savedChatRoom);
 	}
 
-	public void unregisterChatRoom(String memberId, Integer chatRoomId) {
+	public void unregisterChatRoom(String memberId, String chatRoomId) {
 		Member member = memberRepository.findById(memberId)
 			.orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
