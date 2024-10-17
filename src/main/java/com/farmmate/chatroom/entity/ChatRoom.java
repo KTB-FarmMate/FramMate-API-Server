@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoom {
 	@Id
-	@Column(columnDefinition = "char(36)")
+	@Column(columnDefinition = "char(31)")
 	private String id;
 
 	@OneToOne(fetch = FetchType.LAZY)

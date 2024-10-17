@@ -1,5 +1,7 @@
 package com.farmmate.crop.entity;
 
+import org.springframework.data.domain.Persistable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Crop {
+public class Crop implements Persistable<Integer> {
 	@Id
 	private Integer id;
 	private String name;
@@ -26,5 +28,10 @@ public class Crop {
 			.id(id)
 			.name(name)
 			.build();
+	}
+
+	@Override
+	public boolean isNew() {
+		return id == null;
 	}
 }
