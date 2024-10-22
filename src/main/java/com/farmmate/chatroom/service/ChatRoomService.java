@@ -35,12 +35,12 @@ public class ChatRoomService {
 			.collect(Collectors.toUnmodifiableList());
 	}
 
-	public ThreadRegisterResponse registerChatRoom(String memberId, Integer cropId,
+	public ThreadRegisterResponse registerChatRoom(String memberId,
 		ChatRoomRegistrationRequest request) {
 		Member member = memberRepository.findById(memberId)    // FIXME: getReferenceById로 조회시에도 SELECT 쿼리가 발생함
 			.orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
-		Crop crop = cropRepository.findById(cropId) // FIXME: getReferenceById로 조회시에도 SELECT 쿼리가 발생함
+		Crop crop = cropRepository.findById(request.cropId()) // FIXME: getReferenceById로 조회시에도 SELECT 쿼리가 발생함
 			.orElseThrow(() -> new IllegalArgumentException("Crop not found"));
 
 		if (chatRoomRepository.existsByMemberAndCrop(member, crop)) {

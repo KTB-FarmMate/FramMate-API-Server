@@ -20,27 +20,26 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping
 public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
 
-	@GetMapping("{memberId}/chat-rooms")
+	@GetMapping("/members/{memberId}/threads")
 	public List<RegisteredThreadFindResponse> findChatRooms(@PathVariable String memberId) {
 		return chatRoomService.findRegisteredChatRooms(memberId);
 	}
 
-	@PostMapping("{memberId}/chat-rooms/{cropId}")
+	@PostMapping("/members/{memberId}/threads")
 	public ResponseEntity<ThreadRegisterResponse> registerChatRoom(@PathVariable String memberId,
-		@PathVariable Integer cropId,
 		@RequestBody ChatRoomRegistrationRequest request) {
-		ThreadRegisterResponse response = chatRoomService.registerChatRoom(memberId, cropId, request);
+		ThreadRegisterResponse response = chatRoomService.registerChatRoom(memberId, request);
 
 		return ResponseEntity.created(null).body(response);
 	}
 
-	@DeleteMapping("{memberId}/chat-rooms/{chatRoomId}")
-	public ResponseEntity<Void> unregisterChatRoom(@PathVariable String memberId, @PathVariable String chatRoomId) {
-		chatRoomService.unregisterChatRoom(memberId, chatRoomId);
+	@DeleteMapping("/members/{memberId}/threads/{threadId}")
+	public ResponseEntity<Void> unregisterChatRoom(@PathVariable String memberId, @PathVariable String threadId) {
+		chatRoomService.unregisterChatRoom(memberId, threadId);
 
 		return ResponseEntity.noContent().build();
 	}

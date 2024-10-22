@@ -15,8 +15,9 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 	private final MemberService memberService;
 
-	@PostMapping("/register")
+	@PostMapping
 	public MemberRegisterResponse register() {
 		return memberService.register();
 	}
+
 }
