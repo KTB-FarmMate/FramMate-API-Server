@@ -3,6 +3,7 @@ package com.farmmate.chatroom.entity;
 import java.time.LocalDateTime;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
+import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.member.entity.Member;
 
@@ -58,5 +59,14 @@ public class ChatRoom {
 			.isGrowing(true)
 			.address(request.address())
 			.build();
+	}
+
+	public void update(ChatRoomUpdateRequest request) {
+		if (request.address() != null) {
+			this.address = request.address();
+		}
+		if (request.plantedAt() != null) {
+			this.updatedAt = request.plantedAt();
+		}
 	}
 }

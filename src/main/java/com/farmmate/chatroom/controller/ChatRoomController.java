@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
+import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
 import com.farmmate.chatroom.service.ChatRoomService;
@@ -35,6 +37,14 @@ public class ChatRoomController {
 		ThreadRegisterResponse response = chatRoomService.registerChatRoom(memberId, request);
 
 		return ResponseEntity.created(null).body(response);
+	}
+
+	@PatchMapping("/members/{memberId}/threads/{threadId}")
+	public ResponseEntity<Void> updateChatRoom(@PathVariable String memberId, @PathVariable String threadId,
+		@RequestBody ChatRoomUpdateRequest request) {
+		chatRoomService.updateChatRoom(memberId, threadId, request);
+
+		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/members/{memberId}/threads/{threadId}")

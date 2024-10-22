@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
+import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
 import com.farmmate.chatroom.entity.ChatRoom;
@@ -65,5 +66,21 @@ public class ChatRoomService {
 		}
 
 		chatRoomRepository.delete(chatRoom);
+	}
+
+	public void updateChatRoom(String memberId, String threadId, ChatRoomUpdateRequest request) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
+			.orElseThrow(() -> new IllegalArgumentException("ChatRoom not found"));
+
+		if (!chatRoom.getMember().equals(member)) {
+			throw new IllegalArgumentException("ChatRoom does not belong to the member");
+		}
+
+		chatRoom.update(request);
+
+		chatRoomRepository.save(chatRoom);
 	}
 }
