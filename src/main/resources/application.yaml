@@ -3,6 +3,7 @@ spring:
     name: farmmate
   profiles:
     group:
-      local: local, external
+      local: local
+      dev: dev
     default: local
 
