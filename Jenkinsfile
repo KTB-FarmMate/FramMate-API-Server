@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Git 소스 코드를 체크아웃하는 단계
-                git branch: 'main', url: "https://github.com/KTB-farmMate", credentialsId: 'ktb-farmmate'
+                git branch: 'cloud_test', url: "https://github.com/KTB-farmMate/FramMate-API-Server", credentialsId: 'ktb-farmmate'
             }
         }
 
