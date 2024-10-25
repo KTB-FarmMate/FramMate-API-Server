@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'farmmate-java-build-agent'
+    }
 
     environment {
         REPO = 'KTB-FarmMate/FramMate-API-Server'
