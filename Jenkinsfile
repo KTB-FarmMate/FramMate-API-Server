@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // ECR에 Docker 이미지를 푸시하는 단계
-                    docker.withRegistry("https://${ECR_REPO}", "$ECR_CREDENTIALS_ID") {
+                    docker.withRegistry("https://${ECR_REPO}", "${ECR_CREDENTIALS_ID}") {
                         dockerImage.push('latest')
                     }
                 }
