@@ -6,7 +6,7 @@ pipeline {
     environment {
         REPO = 'KTB-FarmMate/FramMate-API-Server'
         ECR_REPO = '211125697339.dkr.ecr.ap-northeast-2.amazonaws.com/farmmate/backend'
-        ECR_CREDENTIALS_ID = 'ecr_credentials_id'
+        ECR_CREDENTIALS_ID = 'ecr:ap-northeast-2:ecr_credentials_id'
         SSH_CREDENTIALS_ID = 'EC2_ssh_key_test'
     }
 
