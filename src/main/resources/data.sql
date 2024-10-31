@@ -13,9 +13,10 @@ VALUES ('123e4567-e89b-12d3-a456-426614174000'),
 
 -- crop 테이블에 데이터 삽입
 INSERT INTO crop (id, name)
-VALUES (1, '콩'),
-       (2, '쌀'),
-       (3, '감자');
+VALUES (1, '당근'),
+       (2, '양파'),
+       (3, '감자'),
+       (4, '고구마');
 
 -- chat_room 테이블에 데이터 삽입 (올바른 외래 키를 참조)
 INSERT INTO chat_room (id, member_id, crop_id, created_at, updated_at, is_growing, address)
