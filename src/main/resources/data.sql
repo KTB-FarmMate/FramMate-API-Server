@@ -18,11 +18,11 @@ VALUES (1, '당근'),
        (3, '감자'),
        (4, '고구마');
 
--- chat_room 테이블에 데이터 삽입 (올바른 외래 키를 참조)
-INSERT INTO chat_room (id, member_id, crop_id, created_at, updated_at, is_growing, address)
+-- chat_room 테이블에 데이터 삽입
+INSERT INTO chat_room (id, member_id, crop_id, created_at, updated_at, address, planted_at)
 VALUES ('thread_Q2NO6D1Jt8Stc9g8ds7LfOY6', '123e4567-e89b-12d3-a456-426614174000', 1, '2024-01-01 10:00:00',
-        '2024-01-01 10:00:00', 1, '서울시 강남구'),
+        '2024-01-01 10:00:00', '서울시 강남구', '2024-03-01'),
        ('thread_wfioqDZGgMNVt80pn6LQH6IR', '123e4567-e89b-12d3-a456-426614174000', 2, '2024-01-01 10:00:00',
-        '2024-01-01 10:00:00', 0, '서울시 서초구'),
+        '2024-01-01 10:00:00', '서울시 서초구', '2024-03-02'),
        ('thread_abcdqDZGgMNVt80pn6LQH6IR', '223e4567-e89b-12d3-a456-426614174001', 3, '2024-01-01 10:00:00',
-        '2024-01-01 10:00:00', 1, '서울시 용산구');
+        '2024-01-01 10:00:00', '서울시 용산구', '2024-03-03');

@@ -1,5 +1,6 @@
 package com.farmmate.chatroom.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
@@ -7,12 +8,14 @@ import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.member.entity.Member;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,21 +35,25 @@ public class ChatRoom {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Member member;
 
+	@Column(nullable = false)
 	private LocalDateTime createdAt;
 
+	@Column(nullable = false)
 	private LocalDateTime updatedAt;
 
-	private Boolean isGrowing;
+	@Column(nullable = false)
+	private LocalDate plantedAt;
 
+	@Column(nullable = false)
 	private String address;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private ChatRoom(String id, Crop crop, Member member, Boolean isGrowing, String address) {
+	private ChatRoom(String id, Crop crop, Member member, String address, LocalDate plantedAt) {
 		this.id = id;
 		this.crop = crop;
 		this.member = member;
-		this.isGrowing = isGrowing;
 		this.address = address;
+		this.plantedAt = plantedAt;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
 	}
@@ -56,7 +63,7 @@ public class ChatRoom {
 			.id(request.threadId())
 			.crop(crop)
 			.member(member)
-			.isGrowing(true)
+			.plantedAt(request.plantedAt())
 			.address(request.address())
 			.build();
 	}
