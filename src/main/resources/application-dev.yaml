@@ -4,7 +4,7 @@ spring:
       on-profile: dev
   jpa:
     hibernate:
-      ddl-auto: update        # schema.sql을 통해 테이블을 생성하므로 validate로 설정
+      ddl-auto: validate        # schema.sql을 통해 테이블을 생성하므로 validate로 설정
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
