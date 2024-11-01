@@ -7,3 +7,6 @@ spring:
       dev: dev
     default: local
 
+server:
+  servlet:
+    context-path: /api
