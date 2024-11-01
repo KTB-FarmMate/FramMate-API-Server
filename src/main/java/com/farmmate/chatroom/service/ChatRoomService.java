@@ -1,7 +1,6 @@
 package com.farmmate.chatroom.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +32,7 @@ public class ChatRoomService {
 
 		return chatRooms.stream()
 			.map(RegisteredThreadFindResponse::from)
-			.collect(Collectors.toUnmodifiableList());
+			.toList();
 	}
 
 	public ThreadRegisterResponse registerChatRoom(String memberId,
