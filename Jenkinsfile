@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Git 소스 코드를 체크아웃하는 단계
-                git branch: 'cloud_test', url: "https://github.com/KTB-FarmMate/FramMate-API-Server", credentialsId: 'ktb-farmmate'
+                git branch: 'dev', url: "https://github.com/KTB-FarmMate/FramMate-API-Server", credentialsId: 'ktb-farmmate'
             }
         }
 
