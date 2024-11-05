@@ -1,6 +1,7 @@
 package com.farmmate.chatroom.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import com.farmmate.chatroom.entity.ChatRoom;
 import com.farmmate.chatroom.repository.ChatRoomRepository;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.crop.repository.CropRepository;
+import com.farmmate.global.common.util.RepositoryUtils;
 import com.farmmate.global.error.exception.CustomException;
 import com.farmmate.global.error.exception.ErrorCode;
 import com.farmmate.member.entity.Member;
@@ -39,44 +41,40 @@ public class ChatRoomService {
 
 	public ThreadRegisterResponse registerChatRoom(String memberId,
 		ChatRoomRegistrationRequest request) {
-		Member member = memberRepository.getReferenceById(memberId);   // FIXME: getReferenceById로 조회시에도 SELECT 쿼리가 발생
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId, ErrorCode.MEMBER_NOT_FOUND);
+		Crop cropProxy = RepositoryUtils.getReferenceOrThrow(cropRepository, request.cropId(), ErrorCode.CROP_NOT_FOUND);
 
-		Crop crop = cropRepository.findById(request.cropId()) // FIXME: getReferenceById로 조회시에도 SELECT 쿼리가 발생함
-			.orElseThrow(() -> new CustomException(ErrorCode.CROP_NOT_FOUND));
-
-		if (chatRoomRepository.existsByMemberAndCrop(member, crop)) {
+		if (chatRoomRepository.existsByMemberAndCrop(memberProxy, cropProxy)) {
 			throw new CustomException(ErrorCode.CHAT_ROOM_ALREADY_EXISTS);
 		}
 
-		ChatRoom newChatRoom = ChatRoom.create(crop, member, request);
-		ChatRoom savedChatRoom = chatRoomRepository.save(newChatRoom);
+		ChatRoom chatRoom = ChatRoom.create(cropProxy, memberProxy, request);
+		ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
 
 		return ThreadRegisterResponse.from(savedChatRoom);
 	}
 
 	public void unregisterChatRoom(String memberId, String chatRoomId) {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new IllegalArgumentException("Member not found"));
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId, ErrorCode.MEMBER_NOT_FOUND);
 
 		ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
-			.orElseThrow(() -> new IllegalArgumentException("ChatRoom not found"));
+			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
 
-		if (!chatRoom.getMember().equals(member)) {
-			throw new IllegalArgumentException("ChatRoom does not belong to the member");
+		if (!chatRoom.getMember().equals(memberProxy)) {
+			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
 		}
 
 		chatRoomRepository.delete(chatRoom);
 	}
 
 	public void updateChatRoom(String memberId, String threadId, ChatRoomUpdateRequest request) {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new IllegalArgumentException("Member not found"));
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId, ErrorCode.MEMBER_NOT_FOUND);
 
 		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
-			.orElseThrow(() -> new IllegalArgumentException("ChatRoom not found"));
+			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
 
-		if (!chatRoom.getMember().equals(member)) {
-			throw new IllegalArgumentException("ChatRoom does not belong to the member");
+		if (!chatRoom.getMember().equals(memberProxy)) {
+			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
 		}
 
 		chatRoom.update(request);
