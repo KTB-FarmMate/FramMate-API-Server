@@ -13,6 +13,8 @@ import com.farmmate.chatroom.entity.ChatRoom;
 import com.farmmate.chatroom.repository.ChatRoomRepository;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.crop.repository.CropRepository;
+import com.farmmate.global.error.exception.CustomException;
+import com.farmmate.global.error.exception.ErrorCode;
 import com.farmmate.member.entity.Member;
 import com.farmmate.member.repository.MemberRepository;
 
@@ -37,14 +39,13 @@ public class ChatRoomService {
 
 	public ThreadRegisterResponse registerChatRoom(String memberId,
 		ChatRoomRegistrationRequest request) {
-		Member member = memberRepository.findById(memberId)    // FIXME: getReferenceById로 조회시에도 SELECT 쿼리가 발생함
-			.orElseThrow(() -> new IllegalArgumentException("Member not found"));
+		Member member = memberRepository.getReferenceById(memberId);   // FIXME: getReferenceById로 조회시에도 SELECT 쿼리가 발생
 
 		Crop crop = cropRepository.findById(request.cropId()) // FIXME: getReferenceById로 조회시에도 SELECT 쿼리가 발생함
-			.orElseThrow(() -> new IllegalArgumentException("Crop not found"));
+			.orElseThrow(() -> new CustomException(ErrorCode.CROP_NOT_FOUND));
 
 		if (chatRoomRepository.existsByMemberAndCrop(member, crop)) {
-			throw new IllegalArgumentException("ChatRoom already exists");
+			throw new CustomException(ErrorCode.CHAT_ROOM_ALREADY_EXISTS);
 		}
 
 		ChatRoom newChatRoom = ChatRoom.create(crop, member, request);
