@@ -1,0 +1,5 @@
+springdoc:
+  api-docs:
+    path: /api-docs # 기본 OpenAPI 경로
+  swagger-ui:
+    path: /swagger-ui # Swagger UI 경로
