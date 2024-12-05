@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.farmmate.external.dto.response.NowCastResponse;
-import com.farmmate.external.type.ShortTermPrecipitationType;
 import com.farmmate.external.type.SkyCondition;
+import com.farmmate.external.type.UltraShortTermPrecipitationType;
 
 import lombok.NonNull;
 
 public record NowCastVo(
-	ShortTermPrecipitationType precipitationType,    // PTY - 강수형태 코드
+	UltraShortTermPrecipitationType precipitationType,    // PTY - 강수형태 코드
 	int humidity,    // REH - 습도
 	@NonNull SkyCondition skyCondition,    // SKY - 하늘상태 코드
 	double temperature, // T1H - 기온(섭씨)
@@ -29,7 +29,7 @@ public record NowCastVo(
 		}
 
 		return new NowCastVo(
-			ShortTermPrecipitationType.fromCode(dataMap.get("PTY")),
+			UltraShortTermPrecipitationType.fromCode(dataMap.get("PTY")),
 			Integer.parseInt(dataMap.getOrDefault("REH", "0")),
 			SkyCondition.fromCode(dataMap.getOrDefault("SKY", "1")),
 			Double.parseDouble(dataMap.getOrDefault("T1H", "0.0")),

@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum ShortTermPrecipitationType {
+public enum UltraShortTermPrecipitationType {
 	NO_PRECIPITATION("0", "없음"),
 	RAIN("1", "비"),
 	RAIN_SNOW("2", "비/눈"),
@@ -20,13 +20,13 @@ public enum ShortTermPrecipitationType {
 	RAINDROP_SNOWFLAKE("6", "빗방울/눈날림"),
 	SNOWFLAKE("7", "눈날림");
 
-	private static final Map<String, ShortTermPrecipitationType> currentPrecipitationMap = Collections.unmodifiableMap(
+	private static final Map<String, UltraShortTermPrecipitationType> currentPrecipitationMap = Collections.unmodifiableMap(
 		Stream.of(values())
-			.collect(Collectors.toMap(ShortTermPrecipitationType::getCode, Function.identity())));
+			.collect(Collectors.toMap(UltraShortTermPrecipitationType::getCode, Function.identity())));
 	private final String code;
 	private final String description;
 
-	public static ShortTermPrecipitationType fromCode(String code) {
+	public static UltraShortTermPrecipitationType fromCode(String code) {
 		return currentPrecipitationMap.get(code);
 	}
 }
