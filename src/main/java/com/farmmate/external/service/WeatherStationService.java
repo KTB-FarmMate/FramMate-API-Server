@@ -125,10 +125,9 @@ public class WeatherStationService {
 				item -> LocalDate.parse(item.fcstDate(), DateTimeFormatter.ofPattern("yyyyMMdd"))));
 
 		// 각 일별에 대한 정보로 가공한다.
-		List<DayForecastVO> result = groupedItems.entrySet().stream()
+
+		return groupedItems.entrySet().stream()
 			.map(entry -> DayForecastVO.from(entry.getKey(), entry.getValue()))
 			.toList();
-
-		return result;
 	}
 }
