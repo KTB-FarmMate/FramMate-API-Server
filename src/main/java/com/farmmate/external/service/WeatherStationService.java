@@ -14,9 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class WeatherStationService {
-	private static final String SHORT_TERM_WEATHER_API_URL = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst";    // 단기예보 조회
+	private static final String HOST = "apis.data.go.kr";    // 단기예보 조회
+	private static final String CURRENT_WEATHER_INFO_PATH = "1360000/VilageFcstInfoService_2.0/getUltraSrtNcst";    // 초단기실황 조회
 	private final WebClient webClient = WebClient.builder()
-		.baseUrl(SHORT_TERM_WEATHER_API_URL)
+		.baseUrl("https://" + HOST)
 		.build();
 
 	@Value("${weather-station.apikey}")
@@ -29,6 +30,7 @@ public class WeatherStationService {
 
 		CurrentWeatherInfoResponse response = webClient.get()
 			.uri(uriBuilder -> uriBuilder
+				.path(CURRENT_WEATHER_INFO_PATH)
 				.queryParam("pageNo", 1)
 				.queryParam("numOfRows", 10)
 				.queryParam("base_date", requestBaseDate)
