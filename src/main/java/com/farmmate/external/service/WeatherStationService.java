@@ -75,9 +75,9 @@ public class WeatherStationService {
 			})
 			.block();
 
-		NowCastVo vo = NowCastVo.from(response);
+		assert response != null;
 
-		return vo;
+		return NowCastVo.from(response);
 	}
 
 	// 단기예보 조회 (3일간 날씨 조회)
@@ -110,6 +110,8 @@ public class WeatherStationService {
 				throw new RuntimeException("Failed to get short term weather info", e);
 			})
 			.block();
+
+		assert response != null;
 
 		List<Item> items = response.response()
 			.body()
