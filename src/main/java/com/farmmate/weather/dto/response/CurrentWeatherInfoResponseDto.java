@@ -1,6 +1,6 @@
 package com.farmmate.weather.dto.response;
 
-import com.farmmate.external.vo.CurrentWeatherInfoVO;
+import com.farmmate.external.vo.NowCastVo;
 
 public record CurrentWeatherInfoResponseDto(String precipitationType,    // PTY - 강수형태 코드
 											int humidity,
@@ -9,7 +9,7 @@ public record CurrentWeatherInfoResponseDto(String precipitationType,    // PTY 
 											int precipitation   // RN1 - 1시간 강수량
 ) {
 
-	public static CurrentWeatherInfoResponseDto from(CurrentWeatherInfoVO vo) {
+	public static CurrentWeatherInfoResponseDto from(NowCastVo vo) {
 		return new CurrentWeatherInfoResponseDto(vo.precipitationType().getDescription(), vo.humidity(),
 			vo.skyCondition().getDescription(),
 			vo.temperature(), vo.precipitation());

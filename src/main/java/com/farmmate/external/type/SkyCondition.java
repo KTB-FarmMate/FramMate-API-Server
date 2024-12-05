@@ -17,8 +17,9 @@ public enum SkyCondition {
 	MOSTLY_CLOUDY("3", "구름 많음"),
 	CLOUDY("4", "흐림");
 
-	private static final Map<String, SkyCondition> skyConditionMap = Collections.unmodifiableMap(Stream.of(values())
-		.collect(Collectors.toMap(SkyCondition::getCode, Function.identity())));
+	private static final Map<String, SkyCondition> skyConditionMap = Collections.unmodifiableMap(
+		Stream.of(values())
+			.collect(Collectors.toMap(SkyCondition::getCode, Function.identity())));
 	private final String code;
 	private final String description;
 

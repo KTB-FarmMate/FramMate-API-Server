@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record CurrentWeatherInfoResponse(
+public record NowCastResponse(
 	Response response
 ) {
 	@Override
