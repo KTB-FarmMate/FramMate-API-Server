@@ -44,22 +44,6 @@ public record DayForecastVO(
 			.sorted(Comparator.comparing(HourForecastInfo::fcstTime))
 			.toList();
 
-		if (maxTemperature == null) {
-			maxTemperature = hourForecastInfos.stream()
-				.map(HourForecastInfo::temperature)
-				.max(Comparator.naturalOrder())
-				.map(Double::valueOf)
-				.orElse(null);
-		}
-
-		if (minTemperature == null) {
-			minTemperature = hourForecastInfos.stream()
-				.map(HourForecastInfo::temperature)
-				.min(Comparator.naturalOrder())
-				.map(Double::valueOf) // Optional<Double>로 변환
-				.orElse(null); // 없으면 null 반환
-		}
-
 		return new DayForecastVO(forecastDate, maxTemperature, minTemperature, hourForecastInfos);
 	}
 

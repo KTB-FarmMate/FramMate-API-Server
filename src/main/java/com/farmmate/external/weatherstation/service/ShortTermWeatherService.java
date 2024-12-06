@@ -125,6 +125,7 @@ public class ShortTermWeatherService {
 		return groupedItems.entrySet().stream()
 			.sorted(Map.Entry.comparingByKey())
 			.map(entry -> DayForecastVO.from(entry.getKey(), entry.getValue()))
+			.filter(dayForecastVO -> dayForecastVO.maxTemperature() != null && dayForecastVO.minTemperature() != null)
 			.toList();
 	}
 }
