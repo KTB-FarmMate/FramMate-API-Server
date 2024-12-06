@@ -5,7 +5,10 @@ spring:
 
 # 기상청 api key
 weather-station:
-  apikey: ${WEATHER_STATION_API_KEY}
+  short-term:
+    apikey: ${WEATHER_STATION_SHORT_TERM_API_KEY}
+  mid-term:
+    apikey: ${WEATHER_STATION_MID_TERM_API_KEY}
 
 kakao:
   local:

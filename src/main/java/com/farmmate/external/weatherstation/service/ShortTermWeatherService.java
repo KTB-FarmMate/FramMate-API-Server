@@ -28,7 +28,7 @@ public class ShortTermWeatherService {
 	private static final String CURRENT_WEATHER_INFO_PATH = "1360000/VilageFcstInfoService_2.0/getUltraSrtNcst";    // 초단기실황 조회
 	private static final String SHORT_TERM_FORECAST_PATH = "1360000/VilageFcstInfoService_2.0/getVilageFcst";    // 초단기예보 조회
 
-	@Value("${weather-station.apikey}")
+	@Value("${weather-station.short-term.apikey}")
 	private String API_KEY;
 
 	private static List<LocalDateTime> extendBaseTimes(LocalDateTime baseTime) {
