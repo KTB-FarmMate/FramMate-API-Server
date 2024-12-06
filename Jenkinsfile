@@ -1,20 +1,20 @@
 pipeline {
     agent {
-        label 'farmmate-java-python-build-agent'
+        label 'farmmate-api-agent'
     }
 
     environment {
         REPO = 'KTB-FarmMate/FramMate-API-Server'
-        ECR_REPO = '211125697339.dkr.ecr.ap-northeast-2.amazonaws.com/farmmate/backend'
-        ECR_CREDENTIALS_ID = 'ecr:ap-northeast-2:ecr_credentials_id'
-        SSH_CREDENTIALS_ID = 'EC2_ssh_key_test'
+        ECR_REPO = '211125697339.dkr.ecr.ap-northeast-2.amazonaws.com/farmmate-api'
+        ECR_CREDENTIALS_ID = 'ecr:ap-northeast-2:farmmate-ecr'
+        SSH_CREDENTIALS_ID = 'EC2_ssh_key'
     }
 
     stages {
         stage('Checkout') {
             steps {
                 // Git 소스 코드를 체크아웃하는 단계
-                git branch: 'dev', url: "https://github.com/KTB-FarmMate/FramMate-API-Server", credentialsId: 'ktb-farmmate'
+                git branch: 'dev', url: "https://github.com/KTB-FarmMate/FramMate-API-Server", credentialsId: 'farmmate-github-key'
             }
         }
 
@@ -36,27 +36,66 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy to EC2') {
-            // jenkins조건문으로 CI가 성공하면 CD를 실행함
-            when {
-                expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
-            }
             steps {
-                withCredentials([string(credentialsId: 'SSH_apiserver_key', variable: 'EC2_INSTANCE_IP')]) {
+                withCredentials([
+                    string(credentialsId: 'api-server', variable: 'EC2_INSTANCE_IP')
+                ]) {
+                    sshagent([SSH_CREDENTIALS_ID]) {
+                        sh """
+                        # EC2에서 Docker 컨테이너 실행 시 env-file 포함
+                        ssh -o StrictHostKeyChecking=no ec2-user@${EC2_INSTANCE_IP} '
+                        aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REPO}
+                        docker pull ${ECR_REPO}:latest
+                        docker stop ai_server || true
+                        docker rm ai_server || true
+                        docker run -d --env-file /home/ec2-user/.env --name api_server -p 8080:8080 ${ECR_REPO}:latest
+                        docker system prune -f
+                        docker image prune -f
+                        '
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'api-server', variable: 'EC2_INSTANCE_IP')
+                ]) {
                     script {
-                        // SSH를 통해 EC2에 연결하고, ECR 이미지를 가져와 실행
-                        sshagent([SSH_CREDENTIALS_ID]) {
-                            sh """
-                            ssh -o StrictHostKeyChecking=no ec2-user@${EC2_INSTANCE_IP} '
-                            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REPO}
-                            docker pull ${ECR_REPO}:latest
-                            docker stop api_server || true
-                            docker rm api_server || true
-                            docker run -d --name api_server -p 8080:8080 ${ECR_REPO}:latest
-                            docker system prune -f 
-                            docker image prune -f
-                            '
-                            """
+                        def healthUrl = "http://${EC2_INSTANCE_IP}:8080/health"
+                        def maxRetries = 10          // 최대 재시도 횟수
+                        def waitSeconds = 10         // 재시도 간 대기 시간 (초)
+                        def initialWait = 30         // 초기 대기 시간 (초)
+                        def success = false          // Health Check 성공 여부
+        
+                        echo "Initial wait for ${initialWait} seconds to allow container to start..."
+                        sleep(time: initialWait, unit: 'SECONDS') // 초기 대기 시간
+        
+                        for (int i = 1; i <= maxRetries; i++) {
+                            echo "Health check attempt ${i} of ${maxRetries}"
+                            
+                            // curl 명령어를 사용하여 /health 체크
+                            def response = sh(
+                                script: "curl -s -o /dev/null -w '%{http_code}' ${healthUrl}",
+                                returnStdout: true
+                            ).trim()
+        
+                            if (response == '200') {
+                                success = true
+                                break
+                            } else {
+                                sleep(waitSeconds) // 재시도 전 대기
+                            }
+                        }
+        
+                        if (!success) {
+                            error "Health check failed after ${maxRetries} attempts."
+                        } else {
+                            echo "Deployment verified successfully via Health Check."
                         }
                     }
                 }
