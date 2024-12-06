@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -120,19 +118,12 @@ public class ShortTermWeatherService {
 		Map<LocalDate, List<Item>> groupedItems = items.stream()
 			.filter(item -> NumberUtils.isCreatable(item.fcstValue())) // 예보값이 한글로 된 경우도 있으므로 필터링
 			.collect(Collectors.groupingBy(
-				item -> LocalDate.parse(item.fcstDate(), DateTimeFormatter.ofPattern("yyyyMMdd")), // 예보일자로 그룹핑
-				LinkedHashMap::new, // 순서를 보장하기 위해 LinkedHashMap 사용
-				Collectors.collectingAndThen(
-					Collectors.toList(),
-					itemList -> itemList.stream()
-						.sorted(Comparator.comparing(Item::fcstTime)) // fcstTime으로 정렬
-						.collect(Collectors.toList())
-				)
-			));
+				item -> LocalDate.parse(item.fcstDate(), DateTimeFormatter.ofPattern("yyyyMMdd"))));
 
 		// 각 일별에 대한 정보로 가공한다.
 		return groupedItems.entrySet().stream()
-			.map(entry -> DayForecastVO.from(entry.getKey(), entry.getValue())) // fcstTime 정렬된 상태 유지
+			.sorted(Map.Entry.comparingByKey())
+			.map(entry -> DayForecastVO.from(entry.getKey(), entry.getValue()))
 			.toList();
 	}
 }

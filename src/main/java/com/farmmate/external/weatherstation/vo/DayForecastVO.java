@@ -3,6 +3,7 @@ package com.farmmate.external.weatherstation.vo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,6 +41,7 @@ public record DayForecastVO(
 
 		List<HourForecastInfo> hourForecastInfos = hourForecastItems.entrySet().stream()
 			.map(entry -> HourForecastInfo.from(entry.getKey(), entry.getValue()))
+			.sorted(Comparator.comparing(HourForecastInfo::fcstTime))
 			.toList();
 
 		return new DayForecastVO(forecastDate, maxTemperature, minTemperature, hourForecastInfos);
