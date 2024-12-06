@@ -48,8 +48,8 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ec2-user@${EC2_INSTANCE_IP} '
                         aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REPO}
                         docker pull ${ECR_REPO}:latest
-                        docker stop ai_server || true
-                        docker rm ai_server || true
+                        docker stop api_server || true
+                        docker rm api_server || true
                         docker run -d --env-file /home/ec2-user/.env --name api_server -p 8080:8080 ${ECR_REPO}:latest
                         docker system prune -f
                         docker image prune -f
