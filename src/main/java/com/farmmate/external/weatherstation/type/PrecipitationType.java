@@ -1,4 +1,4 @@
-package com.farmmate.external.type;
+package com.farmmate.external.weatherstation.type;
 
 import java.util.Collections;
 import java.util.Map;

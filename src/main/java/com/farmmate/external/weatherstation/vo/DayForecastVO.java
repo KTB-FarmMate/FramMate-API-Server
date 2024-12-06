@@ -1,4 +1,4 @@
-package com.farmmate.external.vo;
+package com.farmmate.external.weatherstation.vo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.farmmate.external.dto.response.ShortTermForecastResponse.Response.Body.Items.Item;
-import com.farmmate.external.type.PrecipitationType;
-import com.farmmate.external.type.SkyCondition;
+import com.farmmate.external.weatherstation.dto.response.ShortTermForecastResponse.Response.Body.Items.Item;
+import com.farmmate.external.weatherstation.type.PrecipitationType;
+import com.farmmate.external.weatherstation.type.SkyCondition;
 
 import lombok.extern.slf4j.Slf4j;
 

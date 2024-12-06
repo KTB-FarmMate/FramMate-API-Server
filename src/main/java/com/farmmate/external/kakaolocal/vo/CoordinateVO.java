@@ -1,4 +1,4 @@
-package com.farmmate.external.vo;
+package com.farmmate.external.kakaolocal.vo;
 
 public record CoordinateVO(double longitude, double latitude) {
 	public static CoordinateVO from(String x, String y) {

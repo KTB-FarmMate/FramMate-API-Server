@@ -1,12 +1,12 @@
-package com.farmmate.external.vo;
+package com.farmmate.external.weatherstation.vo;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.farmmate.external.dto.response.NowCastResponse;
-import com.farmmate.external.type.PrecipitationType;
-import com.farmmate.external.type.SkyCondition;
+import com.farmmate.external.weatherstation.dto.response.NowCastResponse;
+import com.farmmate.external.weatherstation.type.PrecipitationType;
+import com.farmmate.external.weatherstation.type.SkyCondition;
 
 import lombok.NonNull;
 

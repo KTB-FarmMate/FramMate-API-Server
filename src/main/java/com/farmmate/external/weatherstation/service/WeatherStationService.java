@@ -1,4 +1,4 @@
-package com.farmmate.external.service;
+package com.farmmate.external.weatherstation.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,11 +14,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.farmmate.external.dto.response.NowCastResponse;
-import com.farmmate.external.dto.response.ShortTermForecastResponse;
-import com.farmmate.external.dto.response.ShortTermForecastResponse.Response.Body.Items.Item;
-import com.farmmate.external.vo.DayForecastVO;
-import com.farmmate.external.vo.NowCastVo;
+import com.farmmate.external.weatherstation.dto.response.NowCastResponse;
+import com.farmmate.external.weatherstation.dto.response.ShortTermForecastResponse;
+import com.farmmate.external.weatherstation.dto.response.ShortTermForecastResponse.Response.Body.Items.Item;
+import com.farmmate.external.weatherstation.vo.DayForecastVO;
+import com.farmmate.external.weatherstation.vo.NowCastVo;
 
 import lombok.extern.slf4j.Slf4j;
 

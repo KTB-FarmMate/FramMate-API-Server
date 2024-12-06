@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import com.farmmate.external.type.PrecipitationType;
-import com.farmmate.external.type.SkyCondition;
-import com.farmmate.external.vo.DayForecastVO;
+import com.farmmate.external.weatherstation.type.PrecipitationType;
+import com.farmmate.external.weatherstation.type.SkyCondition;
+import com.farmmate.external.weatherstation.vo.DayForecastVO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record ShortTermWeatherInfoResponseDto(

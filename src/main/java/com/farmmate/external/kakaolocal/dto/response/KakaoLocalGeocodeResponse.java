@@ -1,4 +1,4 @@
-package com.farmmate.external.dto.response;
+package com.farmmate.external.kakaolocal.dto.response;
 
 import java.util.List;
 
