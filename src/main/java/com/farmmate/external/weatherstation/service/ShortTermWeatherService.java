@@ -76,7 +76,7 @@ public class ShortTermWeatherService {
 		return NowCastVo.from(response);
 	}
 
-	// 단기예보 조회 (3일간 날씨 조회)
+	// 단기예보 조회 (현재로부터 앞으로의 3일간 날씨 조회)
 	public List<DayForecastVO> getShortTermForeCast(WebClient webClient, LocalDateTime dateTime, int nx, int ny) {
 		LocalDateTime baseTime = extendBaseTimes(dateTime).stream()
 			.filter(time -> time.isBefore(dateTime))
@@ -86,7 +86,6 @@ public class ShortTermWeatherService {
 		String requestBaseTime = baseTime.toLocalTime().toString().replaceAll(":", "").substring(0, 2) + "00";
 
 		// 현재 시간에서 가장 가까운 이전 시간으로 조회
-
 		ShortTermForecastResponse response = webClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.path(SHORT_TERM_FORECAST_PATH)
@@ -117,6 +116,8 @@ public class ShortTermWeatherService {
 		// 각 일별로 묶는다
 		Map<LocalDate, List<Item>> groupedItems = items.stream()
 			.filter(item -> NumberUtils.isCreatable(item.fcstValue())) // 예보값이 한글로 된 경우도 있으므로 필터링
+			.filter(item -> !dateTime.isAfter(
+				LocalDateTime.parse(item.fcstDate() + item.fcstTime(), DateTimeFormatter.ofPattern("yyyyMMddHHmm"))))
 			.collect(Collectors.groupingBy(
 				item -> LocalDate.parse(item.fcstDate(), DateTimeFormatter.ofPattern("yyyyMMdd"))));
 
