@@ -21,7 +21,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: validate        # schema.sql을 통해 테이블을 생성하므로 validate로 설정
+      ddl-auto: create-drop        # schema.sql을 통해 테이블을 생성하므로 validate로 설정
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
@@ -32,8 +32,13 @@ spring:
     sql:
       init:
         mode: always
-#        schema-locations: classpath:/db/data.sql # 스키마 생성 SQL 파일 위치
-#        data-locations: classpath:/db/data.sql    # 데이터 생성 SQL 파일 위치
+  #        schema-locations: classpath:/db/data.sql # 스키마 생성 SQL 파일 위치
+  #        data-locations: classpath:/db/data.sql    # 데이터 생성 SQL 파일 위치
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/farmmate
+
 logging:
   level:
     org:
