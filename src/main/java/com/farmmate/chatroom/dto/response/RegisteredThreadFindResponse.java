@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(description = "등록된 채팅방 응답")
+@Schema(title = "등록된 채팅방 응답")
 public record RegisteredThreadFindResponse(
 	@Schema(description = "작물 ID(식별자)", defaultValue = "1")
 	Integer cropId,

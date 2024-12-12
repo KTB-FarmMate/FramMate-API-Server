@@ -4,7 +4,7 @@ import com.farmmate.external.weatherstation.vo.NowCastVo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "현재 날씨 정보 응답")
+@Schema(title = "현재 날씨 정보 응답")
 public record CurrentWeatherInfoResponseDto(
 	@Schema(description = "강수형태", defaultValue = "없음") String precipitationType,    // PTY - 강수형태 코드
 	@Schema(description = "습도", defaultValue = "50") int humidity,                   // REH - 습도

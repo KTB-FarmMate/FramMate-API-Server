@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 @Builder
-@Schema(description = "병해충 상세정보 응답")
+@Schema(title = "병해충 상세정보 응답")
 public record DiseaseDetailResponse(
 	@Schema(description = "화학적 방제 방법", defaultValue = "화학적 방제 방법") String chemicalPrvnbeMth, // 화학적 방제 방법
 	@Schema(description = "작물명", defaultValue = "쌀") String cropName,                   // 작물명
@@ -47,7 +47,7 @@ public record DiseaseDetailResponse(
 			.build();
 	}
 
-	@Schema(description = "이미지 상세 정보")
+	@Schema(title = "이미지 상세 정보")
 	public record ImageDetail(
 		@Schema(description = "이미지 URL", defaultValue = "이미지 URL") String image,                     // 이미지 URL
 		@Schema(description = "검사 코드", defaultValue = "검사 코드") String iemSpchcknCode,   // 검사 코드
