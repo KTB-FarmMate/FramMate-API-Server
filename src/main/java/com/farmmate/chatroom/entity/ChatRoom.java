@@ -8,14 +8,12 @@ import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.member.entity.Member;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -73,7 +71,9 @@ public class ChatRoom {
 			this.address = request.address();
 		}
 		if (request.plantedAt() != null) {
-			this.updatedAt = request.plantedAt();
+			this.plantedAt = request.plantedAt();
 		}
+
+		this.updatedAt = LocalDateTime.now();
 	}
 }
