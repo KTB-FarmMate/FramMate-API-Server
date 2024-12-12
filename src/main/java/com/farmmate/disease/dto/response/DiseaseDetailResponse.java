@@ -14,16 +14,15 @@ public record DiseaseDetailResponse(
 	@Schema(description = "작물명", defaultValue = "쌀") String cropName,                   // 작물명
 	@Schema(description = "병해 이름(중국어)", defaultValue = "병해 이름(중국어)") String sickNameChn,             // 병해 이름(중국어)
 	@Schema(description = "예방 방법", defaultValue = "예방 방법") String preventionMethod,   // 예방 방법
-	@Schema(description = "바이러스 이미지 리스트", defaultValue = "바이러스 이미지 리스트") List<String> virusImgList,     // 바이러스 이미지 리스트
 	@Schema(description = "병해 이름(한글)", defaultValue = "병해 이름(한글)") String sickNameKor,             // 병해 이름(한글)
 	@Schema(description = "발달 조건", defaultValue = "발달 조건") String developmentCondition, // 발달 조건
 	@Schema(description = "증상", defaultValue = "증상") String symptoms,                   // 증상
 	@Schema(description = "기타", defaultValue = "기타") String etc,                             // 기타
 	@Schema(description = "바이러스 리스트", defaultValue = "바이러스 리스트") List<String> virusList,           // 바이러스 리스트
-	@Schema(description = "이미지 상세 정보 리스트", defaultValue = "이미지 상세 정보 리스트") List<ImageDetail> imageList,
-	// 이미지 상세 정보 리스트
 	@Schema(description = "병해 이름(영어)", defaultValue = "병해 이름(영어)") String sickNameEng,             // 병해 이름(영어)
-	@Schema(description = "생물학적 방제 방법", defaultValue = "생물학적 방제 방법") String biologyPrvnbeMth    // 생물학적 방제 방법
+	@Schema(description = "생물학적 방제 방법", defaultValue = "생물학적 방제 방법") String biologyPrvnbeMth,    // 생물학적 방제 방법
+	@Schema(description = "바이러스 이미지 리스트") List<String> virusImgList,     // 바이러스 이미지 리스트
+	@Schema(description = "이미지 상세 정보 리스트") List<ImageDetail> imageList // 이미지 상세 정보 리스트
 ) {
 
 	public static DiseaseDetailResponse fromVo(DiseaseDetailVo vo) {
