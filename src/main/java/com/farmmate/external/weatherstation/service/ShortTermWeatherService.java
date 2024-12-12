@@ -1,4 +1,4 @@
-package com.farmmate.external.service;
+package com.farmmate.external.weatherstation.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,25 +14,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.farmmate.external.dto.response.NowCastResponse;
-import com.farmmate.external.dto.response.ShortTermForecastResponse;
-import com.farmmate.external.dto.response.ShortTermForecastResponse.Response.Body.Items.Item;
-import com.farmmate.external.vo.DayForecastVO;
-import com.farmmate.external.vo.NowCastVo;
+import com.farmmate.external.weatherstation.dto.response.NowCastResponse;
+import com.farmmate.external.weatherstation.dto.response.ShortTermForecastResponse;
+import com.farmmate.external.weatherstation.dto.response.ShortTermForecastResponse.Response.Body.Items.Item;
+import com.farmmate.external.weatherstation.vo.DayForecastVO;
+import com.farmmate.external.weatherstation.vo.NowCastVo;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class WeatherStationService {
-	private static final String HOST = "apis.data.go.kr";    // 단기예보 조회
+public class ShortTermWeatherService {
 	private static final String CURRENT_WEATHER_INFO_PATH = "1360000/VilageFcstInfoService_2.0/getUltraSrtNcst";    // 초단기실황 조회
 	private static final String SHORT_TERM_FORECAST_PATH = "1360000/VilageFcstInfoService_2.0/getVilageFcst";    // 초단기예보 조회
-	private final WebClient webClient = WebClient.builder()
-		.baseUrl("https://" + HOST)
-		.build();
 
-	@Value("${weather-station.apikey}")
+	@Value("${weather-station.short-term.apikey}")
 	private String API_KEY;
 
 	private static List<LocalDateTime> extendBaseTimes(LocalDateTime baseTime) {
@@ -51,7 +47,7 @@ public class WeatherStationService {
 	}
 
 	// 초단기실황 조회
-	public NowCastVo getCurrentWeatherInfo(LocalDateTime dateTime, int nx, int ny) {
+	protected NowCastVo getCurrentWeatherInfo(WebClient webClient, LocalDateTime dateTime, int nx, int ny) {
 		String requestBaseDate = dateTime.toLocalDate().toString().replaceAll("-", "");
 		String requestBaseTime = dateTime.toLocalTime().toString().replaceAll(":", "").substring(0, 2) + "00";
 
@@ -80,8 +76,8 @@ public class WeatherStationService {
 		return NowCastVo.from(response);
 	}
 
-	// 단기예보 조회 (3일간 날씨 조회)
-	public List<DayForecastVO> getShortTermForeCast(LocalDateTime dateTime, int nx, int ny) {
+	// 단기예보 조회 (현재로부터 앞으로의 3일간 날씨 조회)
+	public List<DayForecastVO> getShortTermForeCast(WebClient webClient, LocalDateTime dateTime, int nx, int ny) {
 		LocalDateTime baseTime = extendBaseTimes(dateTime).stream()
 			.filter(time -> time.isBefore(dateTime))
 			.max(LocalDateTime::compareTo)
@@ -90,7 +86,6 @@ public class WeatherStationService {
 		String requestBaseTime = baseTime.toLocalTime().toString().replaceAll(":", "").substring(0, 2) + "00";
 
 		// 현재 시간에서 가장 가까운 이전 시간으로 조회
-
 		ShortTermForecastResponse response = webClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.path(SHORT_TERM_FORECAST_PATH)
@@ -120,14 +115,17 @@ public class WeatherStationService {
 
 		// 각 일별로 묶는다
 		Map<LocalDate, List<Item>> groupedItems = items.stream()
-			.filter(item -> NumberUtils.isCreatable(item.fcstValue()))    // 예보 값이 한글인 경우도 있으므로 필터링
+			.filter(item -> NumberUtils.isCreatable(item.fcstValue())) // 예보값이 한글로 된 경우도 있으므로 필터링
+			.filter(item -> !dateTime.isAfter(
+				LocalDateTime.parse(item.fcstDate() + item.fcstTime(), DateTimeFormatter.ofPattern("yyyyMMddHHmm"))))
 			.collect(Collectors.groupingBy(
 				item -> LocalDate.parse(item.fcstDate(), DateTimeFormatter.ofPattern("yyyyMMdd"))));
 
 		// 각 일별에 대한 정보로 가공한다.
-
 		return groupedItems.entrySet().stream()
+			.sorted(Map.Entry.comparingByKey())
 			.map(entry -> DayForecastVO.from(entry.getKey(), entry.getValue()))
+			.filter(dayForecastVO -> dayForecastVO.maxTemperature() != null && dayForecastVO.minTemperature() != null)
 			.toList();
 	}
 }

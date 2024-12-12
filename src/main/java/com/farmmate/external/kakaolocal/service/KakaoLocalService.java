@@ -1,11 +1,11 @@
-package com.farmmate.external.service;
+package com.farmmate.external.kakaolocal.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.farmmate.external.dto.response.KakaoLocalGeocodeResponse;
-import com.farmmate.external.vo.CoordinateVO;
+import com.farmmate.external.kakaolocal.dto.response.KakaoLocalGeocodeResponse;
+import com.farmmate.external.kakaolocal.vo.CoordinateVO;
 
 @Service
 public class KakaoLocalService {
