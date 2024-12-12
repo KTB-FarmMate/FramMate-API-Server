@@ -1,4 +1,4 @@
-package com.farmmate.weather.service;
+package com.farmmate.weather.dto.response;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
