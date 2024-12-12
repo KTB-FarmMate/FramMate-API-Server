@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class DiseaseController {
 	private final DiseaseService diseaseService;
 
-	@GetMapping("/pests")
+	@GetMapping("/diseases")
 	public DiseaseDetailResponse findPests(@RequestParam String cropName, @RequestParam String searchName) {
 		return diseaseService.findPests(cropName, searchName);
 	}
