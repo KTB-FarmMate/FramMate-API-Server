@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
+import com.farmmate.chatroom.dto.response.BookmarkResponse;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
 import com.farmmate.chatroom.service.ChatRoomService;
@@ -59,5 +60,11 @@ public class ChatRoomController {
 		chatRoomService.unregisterChatRoom(memberId, threadId);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@Operation(summary = "북마크 조회", description = "채팅방의 사용자가 저장한 북마크를 조회합니다.")
+	@GetMapping("/members/{memberId}/threads/{threadId}/bookmarks")
+	public List<BookmarkResponse> findBookmarks(@PathVariable String memberId, @PathVariable String threadId) {
+		return chatRoomService.findAllBookmarks(memberId, threadId);
 	}
 }

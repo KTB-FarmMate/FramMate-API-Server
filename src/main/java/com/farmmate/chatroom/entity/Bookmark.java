@@ -6,8 +6,10 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.persistence.Id;
+import lombok.Getter;
 
 @Document(collection = "bookmark")
+@Getter
 public class Bookmark {
 	@Id
 	private String id;
