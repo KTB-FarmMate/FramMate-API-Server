@@ -11,6 +11,7 @@ import com.farmmate.external.weatherstation.service.WeatherStationService;
 import com.farmmate.external.weatherstation.vo.DayForecastVO;
 import com.farmmate.external.weatherstation.vo.NowCastVo;
 import com.farmmate.weather.dto.response.CurrentWeatherInfoResponseDto;
+import com.farmmate.weather.dto.response.ShortTermWeatherInfoResponseDto;
 import com.farmmate.weather.util.WeatherStationConverter;
 import com.farmmate.weather.util.vo.GridVO;
 
