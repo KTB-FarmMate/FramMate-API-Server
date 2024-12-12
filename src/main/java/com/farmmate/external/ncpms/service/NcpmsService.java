@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.farmmate.external.ncpms.dto.response.DiseaseDetailResponse;
 import com.farmmate.external.ncpms.dto.response.IntegratedSearchResponse;
+import com.farmmate.external.ncpms.vo.DiseaseDetailVo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.SneakyThrows;
@@ -20,11 +22,12 @@ public class NcpmsService {
 	private static final WebClient webClient = WebClient.builder()
 		.defaultHeaders(header -> header.set("Content-Type", "application/json"))
 		.baseUrl(NCPMS_REQUEST_URL).build();
+	private final ObjectMapper objectMapper = new ObjectMapper();
 	@Value("${ncpms.apikey}")
 	private String API_KEY;
 
 	@SneakyThrows
-	public void findFestAndDisease(String cropName, String searchName) {
+	public DiseaseDetailVo findFestAndDisease(String cropName, String searchName) {
 		String responseBody = webClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.queryParam("searchName", searchName)
@@ -38,7 +41,30 @@ public class NcpmsService {
 			.doOnSuccess(res -> log.info("병해충 통합정보 검색 성공"))
 			.block();
 
-		ObjectMapper objectMapper = new ObjectMapper();
 		IntegratedSearchResponse response = objectMapper.readValue(responseBody, IntegratedSearchResponse.class);
+
+		String detailUrl = response.data()
+			.diseaseDetails()
+			.stream()
+			.filter(diseaseDetail -> diseaseDetail.cropName().equals(cropName))
+			.findFirst()
+			.map(diseaseDetail -> diseaseDetail.detailUrl())
+			.orElseThrow(() -> new RuntimeException("해당 작물의 병해충 정보가 없습니다."));
+
+		responseBody = webClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.query(detailUrl)
+				.build())
+			.retrieve()
+			.bodyToMono(String.class)
+			.doOnError(error -> log.error("error: {}", error))
+			.doOnSuccess(res -> log.info("병해충 상세정보 조회 성공"))
+			.block();
+
+		DiseaseDetailResponse detailResponse = objectMapper.readValue(responseBody, DiseaseDetailResponse.class);
+
+		log.info("disease detail vo: {}", DiseaseDetailVo.fromResponse(detailResponse));
+
+		return DiseaseDetailVo.fromResponse(detailResponse);
 	}
 }
