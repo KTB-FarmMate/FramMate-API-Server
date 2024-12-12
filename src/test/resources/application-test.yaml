@@ -1,0 +1,59 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  # H2 Database 설정
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=MySQL   # H2 DB 연결 주소 (In-Memory Mode)
+    #url: 'jdbc:h2:~/test'    # H2 DB 연결 주소 (Embedded Mode)
+    username: sa        # H2 DB 접속 ID (사용자 지정)
+    password:        # H2 DB 접속 PW (사용자 지정)
+
+  # H2 Console 설정
+  h2:
+    console: # H2 DB를 웹에서 관리할 수 있는 기능
+      enabled: true           # H2 Console 사용 여부
+      path: /h2-console       # H2 Console 접속 주소
+
+  # JPA 설정
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop        # schema.sql을 통해 테이블을 생성하므로 validate로 설정
+    properties:
+      hibernate:
+        format_sql: true      # 쿼리 로그 포맷 (정렬)
+        show_sql: true        # 쿼리 로그 출력
+    #    defer-datasource-initialization: true # ddl-auto 옵션 실행 후 script가 실행되도록 설정
+
+    sql:
+      init:
+        mode: never
+#        schema-locations: classpath:/db/data.sql # 스키마 생성 SQL 파일 위치
+#        data-locations: classpath:/db/data.sql    # 데이터 생성 SQL 파일 위치
+
+# 기상청 api key
+weather-station:
+  short-term:
+    apikey: "mock-api-key"
+  mid-term:
+    apikey: "mock-api-key"
+
+kakao:
+  local:
+    apikey: "mock-api-key"
+
+# 국가농작물병해충관리시스템(NCPMS) api key
+ncpms:
+  apikey: "mock-api-key"
+
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: trace
+

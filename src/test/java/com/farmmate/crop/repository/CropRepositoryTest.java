@@ -7,13 +7,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.farmmate.crop.entity.Crop;
 
+@ActiveProfiles("test")
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CropRepositoryTest {
 	@Autowired
 	private CropRepository cropRepository;
@@ -35,6 +35,10 @@ class CropRepositoryTest {
 		// when
 		List<Crop> savedCrops = cropRepository.findAll();
 
+		savedCrops.forEach(crop -> {
+			System.out.println(crop.getId() + " " + crop.getName());
+		});
+
 		// then
 		assertThat(savedCrops).hasSize(3); // 총 3개의 작물이 저장되어야 함
 
@@ -46,14 +50,4 @@ class CropRepositoryTest {
 		assertThat(savedCrops).extracting(Crop::getName)
 			.containsExactlyInAnyOrder("콩", "쌀", "감자"); // 저장된 작물의 이름 검증
 	}
-
-	@Test
-	void 작물_종류_조회2() {
-
-		// when
-		Crop crop = cropRepository.getReferenceById(1);
-		System.out.println(crop.getId());
-		System.out.println(crop.getName());
-	}
-
 }
