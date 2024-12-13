@@ -5,7 +5,13 @@ import java.util.List;
 import com.farmmate.external.ai.type.Role;
 import com.farmmate.external.ai.vo.ThreadDetailVo;
 
-public record ChatRoomDetailResponse(String threadId, List<Message> messages) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(title = "채팅방 상세 조회 응답")
+public record ChatRoomDetailResponse(
+	@Schema(description = "채팅방 ID") String threadId,
+	@Schema(description = "메시지 목록") List<Message> messages
+) {
 	public static ChatRoomDetailResponse from(ThreadDetailVo vo) {
 		List<Message> messages = vo.messages().stream()
 			.map(Message::fromMessage)
