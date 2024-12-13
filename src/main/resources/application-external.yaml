@@ -17,3 +17,8 @@ kakao:
 # 국가농작물병해충관리시스템(NCPMS) api key
 ncpms:
   apikey: ${NCPMS_API_KEY}
+
+# AI 챗봇 서버 URL
+chatbot:
+  api:
+    url: ${AI_SERVER_URL}
