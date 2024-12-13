@@ -1,20 +1,22 @@
 package com.farmmate.chatroom.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.farmmate.chatroom.dto.request.BookmarkAddRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.chatroom.dto.request.MessageSendRequest;
+import com.farmmate.chatroom.dto.response.BookmarkAddResponse;
+import com.farmmate.chatroom.dto.response.BookmarkResponse;
 import com.farmmate.chatroom.dto.response.ChatRoomDetailResponse;
 import com.farmmate.chatroom.dto.response.CropStatusResponse;
 import com.farmmate.chatroom.dto.response.MessageSendResponse;
-import com.farmmate.chatroom.dto.response.BookmarkResponse;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
+import com.farmmate.chatroom.entity.Bookmark;
 import com.farmmate.chatroom.entity.ChatRoom;
 import com.farmmate.chatroom.repository.BookmarkRepository;
 import com.farmmate.chatroom.repository.ChatRoomRepository;
@@ -170,5 +172,23 @@ public class ChatRoomService {
 			.stream()
 			.map(BookmarkResponse::from)
 			.toList();
+	}
+
+	public BookmarkAddResponse addBookmark(String memberId, String threadId, BookmarkAddRequest request) {
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
+			ErrorCode.MEMBER_NOT_FOUND);
+
+		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
+			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+
+		if (!chatRoom.getMember().equals(memberProxy)) {
+			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
+		}
+
+		Bookmark bookmark = Bookmark.create(chatRoom, request);
+
+		Bookmark savedBookmark = bookmarkRepository.save(bookmark);
+
+		return BookmarkAddResponse.from(savedBookmark);
 	}
 }

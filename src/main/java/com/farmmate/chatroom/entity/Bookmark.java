@@ -20,4 +20,20 @@ public class Bookmark {
 	private String question;
 	private String answer;
 	private LocalDateTime addedAt;
+
+	@Builder(access = AccessLevel.PRIVATE)
+	private Bookmark(String chatRoomId, String question, String answer) {
+		this.chatRoomId = chatRoomId;
+		this.question = question;
+		this.answer = answer;
+		this.addedAt = LocalDateTime.now();
+	}
+
+	public static Bookmark create(ChatRoom chatRoom, BookmarkAddRequest request) {
+		return Bookmark.builder()
+			.chatRoomId(chatRoom.getId())
+			.question(request.question())
+			.answer(request.answer())
+			.build();
+	}
 }
