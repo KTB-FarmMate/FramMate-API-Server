@@ -6,7 +6,3 @@ spring:
       local: local, external
       dev: dev, external
     default: local
-
-server:
-  servlet:
-    context-path: /api
