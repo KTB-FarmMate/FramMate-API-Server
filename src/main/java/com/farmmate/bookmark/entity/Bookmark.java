@@ -25,12 +25,14 @@ public class Bookmark {
 	private String question;
 	private String answer;
 	private LocalDateTime addedAt;
+	private LocalDateTime chattedAt;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private Bookmark(String chatRoomId, String question, String answer) {
+	private Bookmark(String chatRoomId, String question, String answer, LocalDateTime chattedAt) {
 		this.chatRoomId = chatRoomId;
 		this.question = question;
 		this.answer = answer;
+		this.chattedAt = chattedAt;
 		this.addedAt = LocalDateTime.now();
 	}
 
@@ -39,6 +41,7 @@ public class Bookmark {
 			.chatRoomId(chatRoom.getId())
 			.question(request.question())
 			.answer(request.answer())
+			.chattedAt(request.chattedAt())
 			.build();
 	}
 }
