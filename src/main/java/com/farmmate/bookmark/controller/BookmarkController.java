@@ -16,8 +16,10 @@ import com.farmmate.bookmark.dto.response.BookmarkResponse;
 import com.farmmate.bookmark.service.BookmarkService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "북마크", description = "북마크 관련 API")
 @RestController
 @RequiredArgsConstructor
 public class BookmarkController {
