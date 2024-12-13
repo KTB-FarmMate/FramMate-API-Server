@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
+import com.farmmate.chatroom.dto.response.ChatRoomDetailResponse;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
 import com.farmmate.chatroom.service.ChatRoomService;
@@ -59,5 +60,12 @@ public class ChatRoomController {
 		chatRoomService.unregisterChatRoom(memberId, threadId);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@Operation(summary = "채팅방 상세 조회", description = "사용자가 등록한 채팅방의 대화 내역을 조회합니다.")
+	@GetMapping("/members/{memberId}/threads/{threadId}")
+	public ChatRoomDetailResponse getChatRoomDetail(@PathVariable String memberId,
+		@PathVariable String threadId) {
+		return chatRoomService.getChatRoomDetail(memberId, threadId);
 	}
 }

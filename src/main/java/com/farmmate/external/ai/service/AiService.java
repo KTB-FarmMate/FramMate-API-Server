@@ -10,7 +10,9 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import com.farmmate.external.ai.dto.request.ThreadCreateRequest;
 import com.farmmate.external.ai.dto.response.ThreadCreateResponse;
+import com.farmmate.external.ai.dto.response.ThreadDetailResponse;
 import com.farmmate.external.ai.vo.ThreadCreateVo;
+import com.farmmate.external.ai.vo.ThreadDetailVo;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -45,5 +47,17 @@ public class AiService {
 			.block();
 
 		return ThreadCreateVo.fromResponse(response);
+	}
+
+	public ThreadDetailVo getThreadDetail(String memberId, String threadId) {
+		ThreadDetailResponse response = webClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/members/{memberId}/threads/{threadId}")
+				.build(memberId, threadId))
+			.retrieve()
+			.bodyToMono(ThreadDetailResponse.class)
+			.block();
+
+		return ThreadDetailVo.fromResponse(response);
 	}
 }
