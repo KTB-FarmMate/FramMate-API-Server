@@ -13,12 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.farmmate.chatroom.dto.request.BookmarkAddRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.chatroom.dto.request.MessageSendRequest;
-import com.farmmate.chatroom.dto.response.BookmarkAddResponse;
-import com.farmmate.chatroom.dto.response.BookmarkResponse;
 import com.farmmate.chatroom.dto.response.ChatRoomDetailResponse;
 import com.farmmate.chatroom.dto.response.CropStatusResponse;
 import com.farmmate.chatroom.dto.response.MessageSendResponse;
@@ -88,27 +85,5 @@ public class ChatRoomController {
 	public CropStatusResponse getStatus(@PathVariable String memberId, @PathVariable String threadId,
 		@RequestParam Integer cropId) {
 		return chatRoomService.getCropStatus(memberId, threadId, cropId);
-	}
-
-	@Operation(summary = "북마크 조회", description = "채팅방의 사용자가 저장한 북마크를 조회합니다.")
-	@GetMapping("/members/{memberId}/threads/{threadId}/bookmarks")
-	public List<BookmarkResponse> findBookmarks(@PathVariable String memberId, @PathVariable String threadId) {
-		return chatRoomService.findAllBookmarks(memberId, threadId);
-	}
-
-	@Operation(summary = "북마크 등록", description = "채팅방의 사용자가 북마크를 등록합니다.")
-	@PostMapping("/members/{memberId}/threads/{threadId}/bookmarks")
-	public BookmarkAddResponse addBookmark(@PathVariable String memberId, @PathVariable String threadId,
-		@RequestBody BookmarkAddRequest request) {
-		return chatRoomService.addBookmark(memberId, threadId, request);
-	}
-
-	@Operation(summary = "북마크 삭제", description = "채팅방의 사용자가 북마크를 삭제합니다.")
-	@DeleteMapping("/members/{memberId}/threads/{threadId}/bookmarks/{bookmarkId}")
-	public ResponseEntity<Void> removeBookmark(@PathVariable String memberId, @PathVariable String threadId,
-		@PathVariable String bookmarkId) {
-		chatRoomService.removeBookmark(memberId, threadId, bookmarkId);
-
-		return ResponseEntity.noContent().build();
 	}
 }

@@ -5,18 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.farmmate.chatroom.dto.request.BookmarkAddRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.chatroom.dto.request.MessageSendRequest;
-import com.farmmate.chatroom.dto.response.BookmarkAddResponse;
-import com.farmmate.chatroom.dto.response.BookmarkResponse;
 import com.farmmate.chatroom.dto.response.ChatRoomDetailResponse;
 import com.farmmate.chatroom.dto.response.CropStatusResponse;
 import com.farmmate.chatroom.dto.response.MessageSendResponse;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
-import com.farmmate.chatroom.entity.Bookmark;
 import com.farmmate.chatroom.entity.ChatRoom;
 import com.farmmate.chatroom.repository.BookmarkRepository;
 import com.farmmate.chatroom.repository.ChatRoomRepository;
@@ -155,57 +151,5 @@ public class ChatRoomService {
 		CropStatusVo vo = aiService.getCropStatus(memberId, threadId, crop.getName());
 
 		return CropStatusResponse.from(vo);
-	}
-
-	public List<BookmarkResponse> findAllBookmarks(String memberId, String threadId) {
-		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
-			ErrorCode.MEMBER_NOT_FOUND);
-
-		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
-			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
-
-		if (!chatRoom.getMember().equals(memberProxy)) {
-			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
-		}
-
-		return bookmarkRepository.findAllByChatRoomId(threadId)
-			.stream()
-			.map(BookmarkResponse::from)
-			.toList();
-	}
-
-	public BookmarkAddResponse addBookmark(String memberId, String threadId, BookmarkAddRequest request) {
-		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
-			ErrorCode.MEMBER_NOT_FOUND);
-
-		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
-			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
-
-		if (!chatRoom.getMember().equals(memberProxy)) {
-			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
-		}
-
-		Bookmark bookmark = Bookmark.create(chatRoom, request);
-
-		Bookmark savedBookmark = bookmarkRepository.save(bookmark);
-
-		return BookmarkAddResponse.from(savedBookmark);
-	}
-
-	public void removeBookmark(String memberId, String threadId, String bookmarkId) {
-		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
-			ErrorCode.MEMBER_NOT_FOUND);
-
-		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
-			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
-
-		if (!chatRoom.getMember().equals(memberProxy)) {
-			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
-		}
-
-		Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
-			.orElseThrow(() -> new CustomException(ErrorCode.BOOKMARK_NOT_FOUND));
-
-		bookmarkRepository.delete(bookmark);
 	}
 }

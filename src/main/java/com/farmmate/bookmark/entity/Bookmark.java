@@ -1,11 +1,12 @@
-package com.farmmate.chatroom.entity;
+package com.farmmate.bookmark.entity;
 
 import java.time.LocalDateTime;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.farmmate.chatroom.dto.request.BookmarkAddRequest;
+import com.farmmate.bookmark.dto.request.BookmarkAddRequest;
+import com.farmmate.chatroom.entity.ChatRoom;
 
 import jakarta.persistence.Id;
 import lombok.AccessLevel;

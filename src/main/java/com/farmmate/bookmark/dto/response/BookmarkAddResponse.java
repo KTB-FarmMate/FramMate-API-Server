@@ -1,6 +1,6 @@
-package com.farmmate.chatroom.dto.response;
+package com.farmmate.bookmark.dto.response;
 
-import com.farmmate.chatroom.entity.Bookmark;
+import com.farmmate.bookmark.entity.Bookmark;
 
 public record BookmarkAddResponse(String bookmarkId) {
 	public static BookmarkAddResponse from(Bookmark bookmark) {

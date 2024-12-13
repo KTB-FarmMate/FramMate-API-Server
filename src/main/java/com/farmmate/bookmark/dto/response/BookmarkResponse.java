@@ -1,8 +1,8 @@
-package com.farmmate.chatroom.dto.response;
+package com.farmmate.bookmark.dto.response;
 
 import java.time.LocalDateTime;
 
-import com.farmmate.chatroom.entity.Bookmark;
+import com.farmmate.bookmark.entity.Bookmark;
 
 import lombok.AccessLevel;
 import lombok.Builder;
