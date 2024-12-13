@@ -98,7 +98,7 @@ public class ChatRoomController {
 
 	@Operation(summary = "북마크 등록", description = "채팅방의 사용자가 북마크를 등록합니다.")
 	@PostMapping("/members/{memberId}/threads/{threadId}/bookmarks")
-	public BookmarkAddResponse registerBookmark(@PathVariable String memberId, @PathVariable String threadId,
+	public BookmarkAddResponse addBookmark(@PathVariable String memberId, @PathVariable String threadId,
 		@RequestBody BookmarkAddRequest request) {
 		return chatRoomService.addBookmark(memberId, threadId, request);
 	}
