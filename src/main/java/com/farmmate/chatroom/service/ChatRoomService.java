@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
+import com.farmmate.chatroom.dto.request.MessageSendRequest;
 import com.farmmate.chatroom.dto.response.ChatRoomDetailResponse;
+import com.farmmate.chatroom.dto.response.MessageSendResponse;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
 import com.farmmate.chatroom.entity.ChatRoom;
@@ -17,6 +19,7 @@ import com.farmmate.crop.repository.CropRepository;
 import com.farmmate.external.ai.service.AiService;
 import com.farmmate.external.ai.vo.ThreadCreateVo;
 import com.farmmate.external.ai.vo.ThreadDetailVo;
+import com.farmmate.external.ai.vo.ThreadMessageSendVo;
 import com.farmmate.global.common.util.RepositoryUtils;
 import com.farmmate.global.error.exception.CustomException;
 import com.farmmate.global.error.exception.ErrorCode;
@@ -105,5 +108,21 @@ public class ChatRoomService {
 		ThreadDetailVo vo = aiService.getThreadDetail(memberId, threadId);
 
 		return ChatRoomDetailResponse.from(vo);
+	}
+
+	public MessageSendResponse sendMessage(String memberId, String threadId, MessageSendRequest request) {
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
+			ErrorCode.MEMBER_NOT_FOUND);
+
+		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
+			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+
+		if (!chatRoom.getMember().equals(memberProxy)) {
+			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
+		}
+
+		ThreadMessageSendVo vo = aiService.sendMessage(memberId, threadId, request.message());
+
+		return MessageSendResponse.from(vo);
 	}
 }

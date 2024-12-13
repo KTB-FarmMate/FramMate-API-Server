@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import com.farmmate.chatroom.dto.request.MessageSendRequest;
 import com.farmmate.external.ai.dto.request.ThreadCreateRequest;
 import com.farmmate.external.ai.dto.response.ThreadCreateResponse;
 import com.farmmate.external.ai.dto.response.ThreadDetailResponse;
+import com.farmmate.external.ai.dto.response.ThreadMessageSendResponse;
 import com.farmmate.external.ai.vo.ThreadCreateVo;
 import com.farmmate.external.ai.vo.ThreadDetailVo;
+import com.farmmate.external.ai.vo.ThreadMessageSendVo;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -59,5 +62,18 @@ public class AiService {
 			.block();
 
 		return ThreadDetailVo.fromResponse(response);
+	}
+
+	public ThreadMessageSendVo sendMessage(String memberId, String threadId, String message) {
+		ThreadMessageSendResponse response = webClient.post()
+			.uri(uriBuilder -> uriBuilder
+				.path("/members/{memberId}/threads/{threadId}")
+				.build(memberId, threadId))
+			.bodyValue(new MessageSendRequest(message))
+			.retrieve()
+			.bodyToMono(ThreadMessageSendResponse.class)
+			.block();
+
+		return ThreadMessageSendVo.fromResponse(response);
 	}
 }
