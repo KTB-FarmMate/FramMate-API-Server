@@ -1,6 +1,8 @@
 CREATE TABLE `member`
 (
-    `id` CHAR(36) NOT NULL
+    `id`         CHAR(36)    NOT NULL, -- UUID를 CHAR(36)으로 저장
+    `created_at` DATETIME(6) NOT NULL, -- createdAt 필드
+    `updated_at` DATETIME(6) NOT NULL  -- updatedAt 필드
 );
 
 CREATE TABLE `crop`
@@ -16,7 +18,7 @@ CREATE TABLE `chat_room`
     `crop_id`    INT          NOT NULL,
     `created_at` DATETIME(6)  NOT NULL,
     `updated_at` DATETIME(6)  NOT NULL,
-    `planted_at` DATE    NOT NULL,
+    `planted_at` DATE         NOT NULL,
     `address`    VARCHAR(255) NULL
 );
 
