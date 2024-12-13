@@ -1,6 +1,7 @@
 package com.farmmate.chatroom.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,9 +12,11 @@ import com.farmmate.chatroom.dto.request.MessageSendRequest;
 import com.farmmate.chatroom.dto.response.ChatRoomDetailResponse;
 import com.farmmate.chatroom.dto.response.CropStatusResponse;
 import com.farmmate.chatroom.dto.response.MessageSendResponse;
+import com.farmmate.chatroom.dto.response.BookmarkResponse;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
 import com.farmmate.chatroom.entity.ChatRoom;
+import com.farmmate.chatroom.repository.BookmarkRepository;
 import com.farmmate.chatroom.repository.ChatRoomRepository;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.crop.repository.CropRepository;
@@ -35,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class ChatRoomService {
 	private final ChatRoomRepository chatRoomRepository;
+	private final BookmarkRepository bookmarkRepository;
 	private final MemberRepository memberRepository;
 	private final CropRepository cropRepository;
 	private final AiService aiService;
@@ -96,6 +100,7 @@ public class ChatRoomService {
 		aiService.updateThread(memberId, threadId, request);    // 쓰레드 반영 후, DB 업데이트
 
 		chatRoom.update(request);
+
 		chatRoomRepository.save(chatRoom);
 	}
 
@@ -148,5 +153,22 @@ public class ChatRoomService {
 		CropStatusVo vo = aiService.getCropStatus(memberId, threadId, crop.getName());
 
 		return CropStatusResponse.from(vo);
+	}
+
+	public List<BookmarkResponse> findAllBookmarks(String memberId, String threadId) {
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
+			ErrorCode.MEMBER_NOT_FOUND);
+
+		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
+			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+
+		if (!chatRoom.getMember().equals(memberProxy)) {
+			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
+		}
+
+		return bookmarkRepository.findAllByChatRoomId(threadId)
+			.stream()
+			.map(BookmarkResponse::from)
+			.toList();
 	}
 }
