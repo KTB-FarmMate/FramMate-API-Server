@@ -11,6 +11,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import com.farmmate.chatroom.dto.request.MessageSendRequest;
 import com.farmmate.external.ai.dto.request.ThreadCreateRequest;
 import com.farmmate.external.ai.dto.response.ThreadCreateResponse;
+import com.farmmate.external.ai.dto.response.ThreadDeleteResponse;
 import com.farmmate.external.ai.dto.response.ThreadDetailResponse;
 import com.farmmate.external.ai.dto.response.ThreadMessageSendResponse;
 import com.farmmate.external.ai.vo.ThreadCreateVo;
@@ -75,5 +76,17 @@ public class AiService {
 			.block();
 
 		return ThreadMessageSendVo.fromResponse(response);
+	}
+
+	public void deleteThread(String memberId, String chatRoomId) {
+		ThreadDeleteResponse response = webClient.delete()
+			.uri(uriBuilder -> uriBuilder
+				.path("/members/{memberId}/threads/{threadId}")
+				.build(memberId, chatRoomId))
+			.retrieve()
+			.bodyToMono(ThreadDeleteResponse.class)
+			.doOnSuccess(res -> log.info("쓰레드 삭제 성공(Thread ID): {}", res))
+			.doOnError(e -> log.error("쓰레드 삭제 에러(Thread ID): {}", e.getMessage()))
+			.block();
 	}
 }

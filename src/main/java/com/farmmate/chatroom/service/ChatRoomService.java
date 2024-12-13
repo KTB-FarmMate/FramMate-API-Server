@@ -75,7 +75,9 @@ public class ChatRoomService {
 			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
 		}
 
-		chatRoomRepository.delete(chatRoom);
+		chatRoomRepository.delete(chatRoom); // DB에 반영 후, Open AI에 반영
+
+		aiService.deleteThread(memberId, chatRoomId);
 	}
 
 	public void updateChatRoom(String memberId, String threadId, ChatRoomUpdateRequest request) {
