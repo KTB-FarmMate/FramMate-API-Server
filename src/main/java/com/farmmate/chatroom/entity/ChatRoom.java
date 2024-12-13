@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.crop.entity.Crop;
+import com.farmmate.external.ai.vo.ThreadCreateVo;
 import com.farmmate.member.entity.Member;
 
 import jakarta.persistence.Column;
@@ -56,9 +57,9 @@ public class ChatRoom {
 		this.updatedAt = LocalDateTime.now();
 	}
 
-	public static ChatRoom create(Crop crop, Member member, ChatRoomRegistrationRequest request) {
+	public static ChatRoom create(Crop crop, Member member, ThreadCreateVo vo, ChatRoomRegistrationRequest request) {
 		return ChatRoom.builder()
-			.id(request.threadId())
+			.id(vo.threadId())
 			.crop(crop)
 			.member(member)
 			.plantedAt(request.plantedAt())

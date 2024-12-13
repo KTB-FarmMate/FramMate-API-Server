@@ -1,7 +1,6 @@
 package com.farmmate.chatroom.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +13,8 @@ import com.farmmate.chatroom.entity.ChatRoom;
 import com.farmmate.chatroom.repository.ChatRoomRepository;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.crop.repository.CropRepository;
+import com.farmmate.external.ai.service.AiService;
+import com.farmmate.external.ai.vo.ThreadCreateVo;
 import com.farmmate.global.common.util.RepositoryUtils;
 import com.farmmate.global.error.exception.CustomException;
 import com.farmmate.global.error.exception.ErrorCode;
@@ -29,6 +30,7 @@ public class ChatRoomService {
 	private final ChatRoomRepository chatRoomRepository;
 	private final MemberRepository memberRepository;
 	private final CropRepository cropRepository;
+	private final AiService aiService;
 
 	@Transactional(readOnly = true)
 	public List<RegisteredThreadFindResponse> findRegisteredChatRooms(String memberId) {
@@ -41,21 +43,25 @@ public class ChatRoomService {
 
 	public ThreadRegisterResponse registerChatRoom(String memberId,
 		ChatRoomRegistrationRequest request) {
-		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId, ErrorCode.MEMBER_NOT_FOUND);
-		Crop cropProxy = RepositoryUtils.getReferenceOrThrow(cropRepository, request.cropId(), ErrorCode.CROP_NOT_FOUND);
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
+			ErrorCode.MEMBER_NOT_FOUND);
+		Crop crop = cropRepository.findById(request.cropId())
+			.orElseThrow(() -> new CustomException(ErrorCode.CROP_NOT_FOUND));
 
-		if (chatRoomRepository.existsByMemberAndCrop(memberProxy, cropProxy)) {
+		if (chatRoomRepository.existsByMemberAndCrop(memberProxy, crop)) {
 			throw new CustomException(ErrorCode.CHAT_ROOM_ALREADY_EXISTS);
 		}
 
-		ChatRoom chatRoom = ChatRoom.create(cropProxy, memberProxy, request);
+		ThreadCreateVo vo = aiService.createThread(memberId, crop.getName(), request.address(), request.plantedAt());
+		ChatRoom chatRoom = ChatRoom.create(crop, memberProxy, vo, request);
 		ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
 
 		return ThreadRegisterResponse.from(savedChatRoom);
 	}
 
 	public void unregisterChatRoom(String memberId, String chatRoomId) {
-		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId, ErrorCode.MEMBER_NOT_FOUND);
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
+			ErrorCode.MEMBER_NOT_FOUND);
 
 		ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
 			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
@@ -68,7 +74,8 @@ public class ChatRoomService {
 	}
 
 	public void updateChatRoom(String memberId, String threadId, ChatRoomUpdateRequest request) {
-		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId, ErrorCode.MEMBER_NOT_FOUND);
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
+			ErrorCode.MEMBER_NOT_FOUND);
 
 		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
 			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
