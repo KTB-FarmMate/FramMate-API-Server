@@ -102,4 +102,13 @@ public class ChatRoomController {
 		@RequestBody BookmarkAddRequest request) {
 		return chatRoomService.addBookmark(memberId, threadId, request);
 	}
+
+	@Operation(summary = "북마크 삭제", description = "채팅방의 사용자가 북마크를 삭제합니다.")
+	@DeleteMapping("/members/{memberId}/threads/{threadId}/bookmarks/{bookmarkId}")
+	public ResponseEntity<Void> removeBookmark(@PathVariable String memberId, @PathVariable String threadId,
+		@PathVariable String bookmarkId) {
+		chatRoomService.removeBookmark(memberId, threadId, bookmarkId);
+
+		return ResponseEntity.noContent().build();
+	}
 }

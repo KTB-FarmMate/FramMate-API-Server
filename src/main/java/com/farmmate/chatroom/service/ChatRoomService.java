@@ -191,4 +191,21 @@ public class ChatRoomService {
 
 		return BookmarkAddResponse.from(savedBookmark);
 	}
+
+	public void removeBookmark(String memberId, String threadId, String bookmarkId) {
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
+			ErrorCode.MEMBER_NOT_FOUND);
+
+		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
+			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+
+		if (!chatRoom.getMember().equals(memberProxy)) {
+			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
+		}
+
+		Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
+			.orElseThrow(() -> new CustomException(ErrorCode.BOOKMARK_NOT_FOUND));
+
+		bookmarkRepository.delete(bookmark);
+	}
 }
