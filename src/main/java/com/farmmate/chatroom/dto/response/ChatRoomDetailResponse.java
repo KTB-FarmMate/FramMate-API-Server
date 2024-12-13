@@ -19,7 +19,8 @@ public record ChatRoomDetailResponse(
 
 		return new ChatRoomDetailResponse(vo.threadId(), messages);
 	}
-
+	
+	@Schema(title = "메시지")
 	public record Message(Role role, String text) {
 		public static Message fromMessage(ThreadDetailVo.Message message) {
 			return new Message(message.role(), message.text());

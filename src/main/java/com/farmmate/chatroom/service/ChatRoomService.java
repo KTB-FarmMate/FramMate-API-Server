@@ -93,8 +93,9 @@ public class ChatRoomService {
 			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
 		}
 
-		chatRoom.update(request);
+		aiService.updateThread(memberId, threadId, request);    // 쓰레드 반영 후, DB 업데이트
 
+		chatRoom.update(request);
 		chatRoomRepository.save(chatRoom);
 	}
 

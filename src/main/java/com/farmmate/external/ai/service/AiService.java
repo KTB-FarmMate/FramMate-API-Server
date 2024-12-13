@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.chatroom.dto.request.MessageSendRequest;
 import com.farmmate.external.ai.dto.request.ThreadCreateRequest;
+import com.farmmate.external.ai.dto.request.ThreadUpdateRequest;
 import com.farmmate.external.ai.dto.response.CropStatusResponse;
 import com.farmmate.external.ai.dto.response.ThreadCreateResponse;
 import com.farmmate.external.ai.dto.response.ThreadDeleteResponse;
@@ -105,5 +107,21 @@ public class AiService {
 			.block();
 
 		return CropStatusVo.fromResponse(response);
+	}
+
+	public void updateThread(String memberId, String threadId, ChatRoomUpdateRequest request) {
+		ThreadUpdateRequest updateRequest = new ThreadUpdateRequest(request.address(),
+			request.plantedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+		webClient.patch()
+			.uri(uriBuilder -> uriBuilder
+				.path("/members/{memberId}/threads/{threadId}")
+				.build(memberId, threadId))
+			.bodyValue(updateRequest)
+			.retrieve()
+			.bodyToMono(Void.class)
+			.doOnSuccess(res -> log.info("쓰레드 수정 성공(Thread ID): {}", threadId))
+			.doOnError(e -> log.error("쓰레드 수정 에러(Thread ID): {}", e.getMessage()))
+			.block();
 	}
 }
