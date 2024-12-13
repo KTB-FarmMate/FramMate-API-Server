@@ -21,13 +21,13 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create-drop        # schema.sql을 통해 테이블을 생성하므로 validate로 설정
+      ddl-auto: validate      # schema.sql을 통해 테이블을 생성하므로 validate로 설정
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
         format_sql: true      # 쿼리 로그 포맷 (정렬)
         show_sql: true        # 쿼리 로그 출력
-        defer-datasource-initialization: true # ddl-auto 옵션 실행 후 script가 실행되도록 설정
+        #defer-datasource-initialization: true # ddl-auto 옵션 실행 후 script가 실행되도록 설정
 
     sql:
       init:
