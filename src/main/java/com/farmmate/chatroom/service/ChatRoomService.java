@@ -9,6 +9,7 @@ import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.chatroom.dto.request.MessageSendRequest;
 import com.farmmate.chatroom.dto.response.ChatRoomDetailResponse;
+import com.farmmate.chatroom.dto.response.CropStatusResponse;
 import com.farmmate.chatroom.dto.response.MessageSendResponse;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
@@ -17,6 +18,7 @@ import com.farmmate.chatroom.repository.ChatRoomRepository;
 import com.farmmate.crop.entity.Crop;
 import com.farmmate.crop.repository.CropRepository;
 import com.farmmate.external.ai.service.AiService;
+import com.farmmate.external.ai.vo.CropStatusVo;
 import com.farmmate.external.ai.vo.ThreadCreateVo;
 import com.farmmate.external.ai.vo.ThreadDetailVo;
 import com.farmmate.external.ai.vo.ThreadMessageSendVo;
@@ -126,5 +128,24 @@ public class ChatRoomService {
 		ThreadMessageSendVo vo = aiService.sendMessage(memberId, threadId, request.message());
 
 		return MessageSendResponse.from(vo);
+	}
+
+	public CropStatusResponse getCropStatus(String memberId, String threadId, Integer cropId) {
+		Member memberProxy = RepositoryUtils.getReferenceOrThrow(memberRepository, memberId,
+			ErrorCode.MEMBER_NOT_FOUND);
+
+		ChatRoom chatRoom = chatRoomRepository.findById(threadId)
+			.orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+
+		if (!chatRoom.getMember().equals(memberProxy)) {
+			throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
+		}
+
+		Crop crop = cropRepository.findById(cropId)
+			.orElseThrow(() -> new CustomException(ErrorCode.CROP_NOT_FOUND));
+
+		CropStatusVo vo = aiService.getCropStatus(memberId, threadId, crop.getName());
+
+		return CropStatusResponse.from(vo);
 	}
 }

@@ -10,10 +10,12 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import com.farmmate.chatroom.dto.request.MessageSendRequest;
 import com.farmmate.external.ai.dto.request.ThreadCreateRequest;
+import com.farmmate.external.ai.dto.response.CropStatusResponse;
 import com.farmmate.external.ai.dto.response.ThreadCreateResponse;
 import com.farmmate.external.ai.dto.response.ThreadDeleteResponse;
 import com.farmmate.external.ai.dto.response.ThreadDetailResponse;
 import com.farmmate.external.ai.dto.response.ThreadMessageSendResponse;
+import com.farmmate.external.ai.vo.CropStatusVo;
 import com.farmmate.external.ai.vo.ThreadCreateVo;
 import com.farmmate.external.ai.vo.ThreadDetailVo;
 import com.farmmate.external.ai.vo.ThreadMessageSendVo;
@@ -88,5 +90,20 @@ public class AiService {
 			.doOnSuccess(res -> log.info("쓰레드 삭제 성공(Thread ID): {}", res))
 			.doOnError(e -> log.error("쓰레드 삭제 에러(Thread ID): {}", e.getMessage()))
 			.block();
+	}
+
+	public CropStatusVo getCropStatus(String memberId, String threadId, String cropName) {
+		CropStatusResponse response = webClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/members/{memberId}/threads/{threadId}/status")
+				.queryParam("cropName", cropName)
+				.build(memberId, threadId))
+			.retrieve()
+			.bodyToMono(CropStatusResponse.class)
+			.doOnSuccess(res -> log.info("작물 상태 조회 성공: {}", res))
+			.doOnError(e -> log.error("작물 상태 조회 에러: {}", e.getMessage()))
+			.block();
+
+		return CropStatusVo.fromResponse(response);
 	}
 }

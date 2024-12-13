@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.farmmate.chatroom.dto.request.ChatRoomRegistrationRequest;
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.chatroom.dto.request.MessageSendRequest;
 import com.farmmate.chatroom.dto.response.ChatRoomDetailResponse;
+import com.farmmate.chatroom.dto.response.CropStatusResponse;
 import com.farmmate.chatroom.dto.response.MessageSendResponse;
 import com.farmmate.chatroom.dto.response.RegisteredThreadFindResponse;
 import com.farmmate.chatroom.dto.response.ThreadRegisterResponse;
@@ -76,5 +78,12 @@ public class ChatRoomController {
 	public MessageSendResponse sendMessage(@PathVariable String memberId, @PathVariable String threadId,
 		@RequestBody MessageSendRequest request) {
 		return chatRoomService.sendMessage(memberId, threadId, request);
+	}
+
+	@Operation(summary = "등록 작물 대시보드 조회", description = "사용자가 등록한 작물에 대한 대시보드를 조회합니다.")
+	@GetMapping("/members/{memberId}/threads/{threadId}/status")
+	public CropStatusResponse getStatus(@PathVariable String memberId, @PathVariable String threadId,
+		@RequestParam Integer cropId) {
+		return chatRoomService.getCropStatus(memberId, threadId, cropId);
 	}
 }
