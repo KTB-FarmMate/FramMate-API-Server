@@ -4,8 +4,17 @@ import java.time.LocalDateTime;
 
 import com.farmmate.chatroom.entity.Bookmark;
 
-public record BookmarkResponse(String question, String answer, LocalDateTime addedAt) {
+import lombok.AccessLevel;
+import lombok.Builder;
+
+@Builder(access = AccessLevel.PRIVATE)
+public record BookmarkResponse(String bookmarkId, String question, String answer, LocalDateTime addedAt) {
 	public static BookmarkResponse from(Bookmark bookmark) {
-		return new BookmarkResponse(bookmark.getQuestion(), bookmark.getAnswer(), bookmark.getAddedAt());
+		return BookmarkResponse.builder()
+			.bookmarkId(bookmark.getId())
+			.question(bookmark.getQuestion())
+			.answer(bookmark.getAnswer())
+			.addedAt(bookmark.getAddedAt())
+			.build();
 	}
 }
