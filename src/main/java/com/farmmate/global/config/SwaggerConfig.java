@@ -1,4 +1,4 @@
-package com.farmmate.config;
+package com.farmmate.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
