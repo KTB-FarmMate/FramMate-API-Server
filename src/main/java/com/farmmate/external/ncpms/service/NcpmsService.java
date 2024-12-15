@@ -1,7 +1,7 @@
 package com.farmmate.external.ncpms.service;
 
-import static com.farmmate.external.type.ServiceCode.*;
-import static com.farmmate.external.type.ServiceType.*;
+import static com.farmmate.external.ncpms.type.ServiceCode.*;
+import static com.farmmate.external.ncpms.type.ServiceType.*;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

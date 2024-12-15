@@ -1,4 +1,4 @@
-package com.farmmate.external.type;
+package com.farmmate.external.ncpms.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

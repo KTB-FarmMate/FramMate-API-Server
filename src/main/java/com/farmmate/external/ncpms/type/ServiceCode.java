@@ -1,4 +1,4 @@
-package com.farmmate.external.type;
+package com.farmmate.external.ncpms.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ServiceCode {
-	// 통합검색
 	DISEASE_SEARCH("SVC01"), // 병 검색 서비스
 	DISEASE_DETAIL("SVC05"),     // 병 상세정보 서비스
 	PATHOGEN_SEARCH("SVC02"),    // 병원체 검색 서비스
