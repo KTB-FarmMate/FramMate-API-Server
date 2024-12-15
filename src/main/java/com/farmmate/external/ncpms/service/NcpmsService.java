@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.farmmate.external.ncpms.dto.response.DiseaseDetailResponse;
 import com.farmmate.external.ncpms.dto.response.IntegratedSearchResponse;
-import com.farmmate.external.ncpms.vo.DiseaseDetailVo;
+import com.farmmate.external.ncpms.dto.response.PestDetailResponse;
+import com.farmmate.external.ncpms.vo.PestDetailVo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.SneakyThrows;
@@ -27,7 +27,7 @@ public class NcpmsService {
 	private String API_KEY;
 
 	@SneakyThrows
-	public DiseaseDetailVo findFestAndDisease(String cropName, String searchName) {
+	public PestDetailVo searchPestDetail(String cropName, String searchName) {
 		String responseBody = webClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.queryParam("searchName", searchName)
@@ -61,10 +61,10 @@ public class NcpmsService {
 			.doOnSuccess(res -> log.info("병해충 상세정보 조회 성공"))
 			.block();
 
-		DiseaseDetailResponse detailResponse = objectMapper.readValue(responseBody, DiseaseDetailResponse.class);
+		PestDetailResponse detailResponse = objectMapper.readValue(responseBody, PestDetailResponse.class);
 
-		log.info("disease detail vo: {}", DiseaseDetailVo.fromResponse(detailResponse));
+		log.info("pest detail vo: {}", PestDetailVo.fromResponse(detailResponse));
 
-		return DiseaseDetailVo.fromResponse(detailResponse);
+		return PestDetailVo.fromResponse(detailResponse);
 	}
 }

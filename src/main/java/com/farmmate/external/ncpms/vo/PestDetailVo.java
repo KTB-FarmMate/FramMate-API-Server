@@ -2,12 +2,12 @@ package com.farmmate.external.ncpms.vo;
 
 import java.util.List;
 
-import com.farmmate.external.ncpms.dto.response.DiseaseDetailResponse;
+import com.farmmate.external.ncpms.dto.response.PestDetailResponse;
 
 import lombok.Builder;
 
 @Builder
-public record DiseaseDetailVo(
+public record PestDetailVo(
 	String chemicalPrvnbeMth, // 화학적 방제 방법
 	String cropName,                   // 작물명
 	String sickNameChn,             // 병해 이름(중국어)
@@ -22,15 +22,15 @@ public record DiseaseDetailVo(
 	String sickNameEng,             // 병해 이름(영어)
 	String biologyPrvnbeMth    // 생물학적 방제 방법
 ) {
-	public static DiseaseDetailVo fromResponse(DiseaseDetailResponse response) {
-		DiseaseDetailResponse.Data data = response.data();
+	public static PestDetailVo fromResponse(PestDetailResponse response) {
+		PestDetailResponse.Data data = response.data();
 
 		List<ImageDetail> images = data.imageList().stream()
 			.map(image -> new ImageDetail(image.image(), image.iemSpchcknCode(), image.iemSpchcknNm(),
 				image.imageTitle()))
 			.toList();
 
-		return DiseaseDetailVo.builder()
+		return PestDetailVo.builder()
 			.chemicalPrvnbeMth(data.chemicalPrvnbeMth())
 			.cropName(data.cropName())
 			.sickNameChn(data.sickNameChn())
@@ -56,6 +56,6 @@ public record DiseaseDetailVo(
 		String iemSpchcknNm,       // 검사 이름
 		String imageTitle            // 이미지 제목
 	) {
-		
+
 	}
 }

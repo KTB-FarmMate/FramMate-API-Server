@@ -1,15 +1,15 @@
-package com.farmmate.disease.dto.response;
+package com.farmmate.pest.dto.response;
 
 import java.util.List;
 
-import com.farmmate.external.ncpms.vo.DiseaseDetailVo;
+import com.farmmate.external.ncpms.vo.PestDetailVo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 @Builder
 @Schema(title = "병해충 상세정보 응답")
-public record DiseaseDetailResponse(
+public record PestDetailResponse(
 	@Schema(description = "화학적 방제 방법", defaultValue = "화학적 방제 방법") String chemicalPrvnbeMth, // 화학적 방제 방법
 	@Schema(description = "작물명", defaultValue = "쌀") String cropName,                   // 작물명
 	@Schema(description = "병해 이름(중국어)", defaultValue = "병해 이름(중국어)") String sickNameChn,             // 병해 이름(중국어)
@@ -25,8 +25,8 @@ public record DiseaseDetailResponse(
 	@Schema(description = "이미지 상세 정보 리스트") List<ImageDetail> imageList // 이미지 상세 정보 리스트
 ) {
 
-	public static DiseaseDetailResponse fromVo(DiseaseDetailVo vo) {
-		return DiseaseDetailResponse.builder()
+	public static PestDetailResponse fromVo(PestDetailVo vo) {
+		return PestDetailResponse.builder()
 			.chemicalPrvnbeMth(vo.chemicalPrvnbeMth())
 			.cropName(vo.cropName())
 			.sickNameChn(vo.sickNameChn())

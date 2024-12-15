@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * 병해충 상세정보 응답
  */
-public record DiseaseDetailResponse(
+public record PestDetailResponse(
 
 	@JsonProperty("service") Data data // 병해충 상세정보 응답
 
