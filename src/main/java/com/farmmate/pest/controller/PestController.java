@@ -1,6 +1,7 @@
 package com.farmmate.pest.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +19,9 @@ public class PestController {
 	private final PestService pestService;
 
 	@Operation(summary = "병충해 상세 조회", description = "사용자가 선택한 작물에 대한 병충해 상세 정보를 조회합니다.")
-	@GetMapping("/pests")
-	public PestDetailResponse findPests(@RequestParam String cropName, @RequestParam String searchName) {
-		return pestService.findPests(cropName, searchName);
+	@GetMapping("/pests/{pestName}")
+	public PestDetailResponse findPests(@RequestParam String cropName, @PathVariable String pestName) {
+		return pestService.findPests(cropName, pestName);
 	}
+
 }
