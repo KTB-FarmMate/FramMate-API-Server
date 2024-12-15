@@ -13,11 +13,13 @@ import com.farmmate.chatroom.dto.request.MessageSendRequest;
 import com.farmmate.external.ai.dto.request.AiThreadCreateRequest;
 import com.farmmate.external.ai.dto.request.AiThreadUpdateRequest;
 import com.farmmate.external.ai.dto.response.AiCropStatusResponse;
+import com.farmmate.external.ai.dto.response.AiReportingPestsResponse;
 import com.farmmate.external.ai.dto.response.AiThreadCreateResponse;
 import com.farmmate.external.ai.dto.response.AiThreadDeleteResponse;
 import com.farmmate.external.ai.dto.response.AiThreadDetailResponse;
 import com.farmmate.external.ai.dto.response.AiThreadMessageSendResponse;
 import com.farmmate.external.ai.vo.CropStatusVo;
+import com.farmmate.external.ai.vo.CurrentReportingPestsVo;
 import com.farmmate.external.ai.vo.ThreadCreateVo;
 import com.farmmate.external.ai.vo.ThreadDetailVo;
 import com.farmmate.external.ai.vo.ThreadMessageSendVo;
@@ -124,5 +126,20 @@ public class AiService {
 			.doOnSuccess(res -> log.info("쓰레드 수정 성공(Thread ID): {}", threadId))
 			.doOnError(e -> log.error("쓰레드 수정 에러(Thread ID): {}", e.getMessage()))
 			.block();
+	}
+
+	public CurrentReportingPestsVo getCurrentReportingPests(String cropName) {
+		AiReportingPestsResponse response = webClient.get()
+			.uri(uriBuilder -> uriBuilder
+				.path("/pests")
+				.queryParam("cropName", cropName)
+				.build())
+			.retrieve()
+			.bodyToMono(AiReportingPestsResponse.class)
+			.doOnSuccess(res -> log.info("해충 정보 조회 성공: {}", res))
+			.doOnError(e -> log.error("해충 정보 조회 에러: {}", e.getMessage()))
+			.block();
+
+		return CurrentReportingPestsVo.fromResponse(response);
 	}
 }

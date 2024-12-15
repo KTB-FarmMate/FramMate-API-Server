@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.farmmate.pest.dto.response.CurrentReportingPestsResponse;
 import com.farmmate.pest.dto.response.PestDetailResponse;
 import com.farmmate.pest.service.PestService;
 
@@ -20,8 +21,14 @@ public class PestController {
 
 	@Operation(summary = "병충해 상세 조회", description = "사용자가 선택한 작물에 대한 병충해 상세 정보를 조회합니다.")
 	@GetMapping("/pests/{pestName}")
-	public PestDetailResponse findPests(@RequestParam String cropName, @PathVariable String pestName) {
+	public PestDetailResponse getReportingPests(@RequestParam String cropName, @PathVariable String pestName) {
 		return pestService.findPests(cropName, pestName);
+	}
+
+	@Operation(summary = "작물의 발효중인 병충해 목록 조회", description = "사용자가 선택한 작물에 대한 병충해 상세 정보를 조회합니다.")
+	@GetMapping("/pests")
+	public CurrentReportingPestsResponse getReportingPests(@RequestParam String cropName) {
+		return pestService.getCurrentReportingPests(cropName);
 	}
 
 }
