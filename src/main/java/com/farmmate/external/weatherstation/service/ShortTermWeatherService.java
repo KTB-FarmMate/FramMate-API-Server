@@ -55,7 +55,7 @@ public class ShortTermWeatherService {
 			.uri(uriBuilder -> uriBuilder
 				.path(CURRENT_WEATHER_INFO_PATH)
 				.queryParam("pageNo", 1)
-				.queryParam("numOfRows", 10)
+				.queryParam("numOfRows", 50)
 				.queryParam("base_date", requestBaseDate)
 				.queryParam("base_time", requestBaseTime)
 				.queryParam("dataType", "JSON")
@@ -90,7 +90,7 @@ public class ShortTermWeatherService {
 			.uri(uriBuilder -> uriBuilder
 				.path(SHORT_TERM_FORECAST_PATH)
 				.queryParam("pageNo", 1)
-				.queryParam("numOfRows", 1000)
+				.queryParam("numOfRows", 3000)
 				.queryParam("base_date", requestBaseDate)
 				.queryParam("base_time", requestBaseTime)
 				.queryParam("dataType", "JSON")
