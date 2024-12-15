@@ -20,3 +20,8 @@ spring:
       maximum-pool-size: 20
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
+
+  data:
+    mongodb:
+      uri: ${MONGODB_ENDPOINT}
+      database: ${MONGODB_DB_NAME}
