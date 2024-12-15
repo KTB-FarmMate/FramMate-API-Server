@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.farmmate.external.weatherstation.dto.response.NowCastResponse;
+import com.farmmate.external.weatherstation.dto.response.WeatherStationNowCastResponse;
 import com.farmmate.external.weatherstation.type.PrecipitationType;
 import com.farmmate.external.weatherstation.type.SkyCondition;
 
@@ -17,14 +17,14 @@ public record NowCastVo(
 	double temperature, // T1H - 기온(섭씨)
 	int precipitation // RN1 - 1시간 강수량(mm)
 ) {
-	public static NowCastVo from(NowCastResponse response) {
-		List<NowCastResponse.Response.Body.Items.Item> items = response.response()
+	public static NowCastVo from(WeatherStationNowCastResponse response) {
+		List<WeatherStationNowCastResponse.Response.Body.Items.Item> items = response.response()
 			.body()
 			.items()
 			.itemElements();
 		Map<String, String> dataMap = new HashMap<>();
 
-		for (NowCastResponse.Response.Body.Items.Item item : items) {
+		for (WeatherStationNowCastResponse.Response.Body.Items.Item item : items) {
 			dataMap.put(item.category(), item.obsrValue());
 		}
 

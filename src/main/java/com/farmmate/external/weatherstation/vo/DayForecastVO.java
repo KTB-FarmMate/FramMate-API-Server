@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.farmmate.external.weatherstation.dto.response.ShortTermForecastResponse.Response.Body.Items.Item;
+import com.farmmate.external.weatherstation.dto.response.WeatherStationShortTermForecastResponse.Response.Body.Items.Item;
 import com.farmmate.external.weatherstation.type.PrecipitationType;
 import com.farmmate.external.weatherstation.type.SkyCondition;
 

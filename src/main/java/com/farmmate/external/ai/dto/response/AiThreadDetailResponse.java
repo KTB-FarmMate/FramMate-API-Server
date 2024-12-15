@@ -2,7 +2,7 @@ package com.farmmate.external.ai.dto.response;
 
 import java.util.List;
 
-public record ThreadDetailResponse(
+public record AiThreadDetailResponse(
 	String message,
 	Data data
 ) {

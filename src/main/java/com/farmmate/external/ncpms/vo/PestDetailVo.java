@@ -2,7 +2,7 @@ package com.farmmate.external.ncpms.vo;
 
 import java.util.List;
 
-import com.farmmate.external.ncpms.dto.response.PestDetailResponse;
+import com.farmmate.external.ncpms.dto.response.NcpmsPestDetailResponse;
 
 import lombok.Builder;
 
@@ -22,8 +22,8 @@ public record PestDetailVo(
 	String sickNameEng,             // 병해 이름(영어)
 	String biologyPrvnbeMth    // 생물학적 방제 방법
 ) {
-	public static PestDetailVo fromResponse(PestDetailResponse response) {
-		PestDetailResponse.Data data = response.data();
+	public static PestDetailVo fromResponse(NcpmsPestDetailResponse response) {
+		NcpmsPestDetailResponse.Data data = response.data();
 
 		List<ImageDetail> images = data.imageList().stream()
 			.map(image -> new ImageDetail(image.image(), image.iemSpchcknCode(), image.iemSpchcknNm(),

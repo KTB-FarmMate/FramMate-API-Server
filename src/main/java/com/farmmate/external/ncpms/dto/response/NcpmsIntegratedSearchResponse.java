@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * 최상위 응답 객체, service 필드를 포함합니다.
  */
-public record IntegratedSearchResponse(
+public record NcpmsIntegratedSearchResponse(
 
 	@JsonProperty("service") Data data // 통합 검색 응답
 ) {

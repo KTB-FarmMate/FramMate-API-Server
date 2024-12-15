@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.farmmate.external.weatherstation.dto.response.NowCastResponse;
-import com.farmmate.external.weatherstation.dto.response.ShortTermForecastResponse;
-import com.farmmate.external.weatherstation.dto.response.ShortTermForecastResponse.Response.Body.Items.Item;
+import com.farmmate.external.weatherstation.dto.response.WeatherStationNowCastResponse;
+import com.farmmate.external.weatherstation.dto.response.WeatherStationShortTermForecastResponse;
+import com.farmmate.external.weatherstation.dto.response.WeatherStationShortTermForecastResponse.Response.Body.Items.Item;
 import com.farmmate.external.weatherstation.vo.DayForecastVO;
 import com.farmmate.external.weatherstation.vo.NowCastVo;
 
@@ -51,7 +51,7 @@ public class ShortTermWeatherService {
 		String requestBaseDate = dateTime.toLocalDate().toString().replaceAll("-", "");
 		String requestBaseTime = dateTime.toLocalTime().toString().replaceAll(":", "").substring(0, 2) + "00";
 
-		NowCastResponse response = webClient.get()
+		WeatherStationNowCastResponse response = webClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.path(CURRENT_WEATHER_INFO_PATH)
 				.queryParam("pageNo", 1)
@@ -64,7 +64,7 @@ public class ShortTermWeatherService {
 				.queryParam("ServiceKey", API_KEY)
 				.build())
 			.retrieve()
-			.bodyToMono(NowCastResponse.class)
+			.bodyToMono(WeatherStationNowCastResponse.class)
 			.doOnError(e -> {
 				log.error(e.getMessage());
 				throw new RuntimeException("Failed to get short term weather info", e);
@@ -86,7 +86,7 @@ public class ShortTermWeatherService {
 		String requestBaseTime = baseTime.toLocalTime().toString().replaceAll(":", "").substring(0, 2) + "00";
 
 		// 현재 시간에서 가장 가까운 이전 시간으로 조회
-		ShortTermForecastResponse response = webClient.get()
+		WeatherStationShortTermForecastResponse response = webClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.path(SHORT_TERM_FORECAST_PATH)
 				.queryParam("pageNo", 1)
@@ -99,7 +99,7 @@ public class ShortTermWeatherService {
 				.queryParam("ServiceKey", API_KEY)
 				.build())
 			.retrieve()
-			.bodyToMono(ShortTermForecastResponse.class)
+			.bodyToMono(WeatherStationShortTermForecastResponse.class)
 			.doOnError(e -> {
 				log.error(e.getMessage());
 				throw new RuntimeException("Failed to get short term weather info", e);

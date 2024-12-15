@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.farmmate.external.ncpms.dto.response.IntegratedSearchResponse;
-import com.farmmate.external.ncpms.dto.response.PestDetailResponse;
+import com.farmmate.external.ncpms.dto.response.NcpmsIntegratedSearchResponse;
+import com.farmmate.external.ncpms.dto.response.NcpmsPestDetailResponse;
 import com.farmmate.external.ncpms.vo.PestDetailVo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,7 +41,8 @@ public class NcpmsService {
 			.doOnSuccess(res -> log.info("병해충 통합정보 검색 성공"))
 			.block();
 
-		IntegratedSearchResponse response = objectMapper.readValue(responseBody, IntegratedSearchResponse.class);
+		NcpmsIntegratedSearchResponse response = objectMapper.readValue(responseBody,
+			NcpmsIntegratedSearchResponse.class);
 
 		String detailUrl = response.data()
 			.diseaseDetails()
@@ -61,7 +62,7 @@ public class NcpmsService {
 			.doOnSuccess(res -> log.info("병해충 상세정보 조회 성공"))
 			.block();
 
-		PestDetailResponse detailResponse = objectMapper.readValue(responseBody, PestDetailResponse.class);
+		NcpmsPestDetailResponse detailResponse = objectMapper.readValue(responseBody, NcpmsPestDetailResponse.class);
 
 		log.info("pest detail vo: {}", PestDetailVo.fromResponse(detailResponse));
 

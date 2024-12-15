@@ -10,13 +10,13 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import com.farmmate.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.farmmate.chatroom.dto.request.MessageSendRequest;
-import com.farmmate.external.ai.dto.request.ThreadCreateRequest;
-import com.farmmate.external.ai.dto.request.ThreadUpdateRequest;
-import com.farmmate.external.ai.dto.response.CropStatusResponse;
-import com.farmmate.external.ai.dto.response.ThreadCreateResponse;
-import com.farmmate.external.ai.dto.response.ThreadDeleteResponse;
-import com.farmmate.external.ai.dto.response.ThreadDetailResponse;
-import com.farmmate.external.ai.dto.response.ThreadMessageSendResponse;
+import com.farmmate.external.ai.dto.request.AiThreadCreateRequest;
+import com.farmmate.external.ai.dto.request.AiThreadUpdateRequest;
+import com.farmmate.external.ai.dto.response.AiCropStatusResponse;
+import com.farmmate.external.ai.dto.response.AiThreadCreateResponse;
+import com.farmmate.external.ai.dto.response.AiThreadDeleteResponse;
+import com.farmmate.external.ai.dto.response.AiThreadDetailResponse;
+import com.farmmate.external.ai.dto.response.AiThreadMessageSendResponse;
 import com.farmmate.external.ai.vo.CropStatusVo;
 import com.farmmate.external.ai.vo.ThreadCreateVo;
 import com.farmmate.external.ai.vo.ThreadDetailVo;
@@ -44,64 +44,65 @@ public class AiService {
 	}
 
 	public ThreadCreateVo createThread(String memberId, String cropName, String address, LocalDate plantedAt) {
-		ThreadCreateResponse response = webClient.post()
+		AiThreadCreateResponse response = webClient.post()
 			.uri(uriBuilder -> uriBuilder
 				.path("/members/{memberId}/threads")
 				.build(memberId))
 			.bodyValue(
-				new ThreadCreateRequest(cropName, address, plantedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
+				new AiThreadCreateRequest(cropName, address,
+					plantedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
 			.retrieve()
-			.bodyToMono(ThreadCreateResponse.class)
+			.bodyToMono(AiThreadCreateResponse.class)
 			.block();
 
 		return ThreadCreateVo.fromResponse(response);
 	}
 
 	public ThreadDetailVo getThreadDetail(String memberId, String threadId) {
-		ThreadDetailResponse response = webClient.get()
+		AiThreadDetailResponse response = webClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.path("/members/{memberId}/threads/{threadId}")
 				.build(memberId, threadId))
 			.retrieve()
-			.bodyToMono(ThreadDetailResponse.class)
+			.bodyToMono(AiThreadDetailResponse.class)
 			.block();
 
 		return ThreadDetailVo.fromResponse(response);
 	}
 
 	public ThreadMessageSendVo sendMessage(String memberId, String threadId, String message) {
-		ThreadMessageSendResponse response = webClient.post()
+		AiThreadMessageSendResponse response = webClient.post()
 			.uri(uriBuilder -> uriBuilder
 				.path("/members/{memberId}/threads/{threadId}")
 				.build(memberId, threadId))
 			.bodyValue(new MessageSendRequest(message))
 			.retrieve()
-			.bodyToMono(ThreadMessageSendResponse.class)
+			.bodyToMono(AiThreadMessageSendResponse.class)
 			.block();
 
 		return ThreadMessageSendVo.fromResponse(response);
 	}
 
 	public void deleteThread(String memberId, String chatRoomId) {
-		ThreadDeleteResponse response = webClient.delete()
+		AiThreadDeleteResponse response = webClient.delete()
 			.uri(uriBuilder -> uriBuilder
 				.path("/members/{memberId}/threads/{threadId}")
 				.build(memberId, chatRoomId))
 			.retrieve()
-			.bodyToMono(ThreadDeleteResponse.class)
+			.bodyToMono(AiThreadDeleteResponse.class)
 			.doOnSuccess(res -> log.info("쓰레드 삭제 성공(Thread ID): {}", res))
 			.doOnError(e -> log.error("쓰레드 삭제 에러(Thread ID): {}", e.getMessage()))
 			.block();
 	}
 
 	public CropStatusVo getCropStatus(String memberId, String threadId, String cropName) {
-		CropStatusResponse response = webClient.get()
+		AiCropStatusResponse response = webClient.get()
 			.uri(uriBuilder -> uriBuilder
 				.path("/members/{memberId}/threads/{threadId}/status")
 				.queryParam("cropName", cropName)
 				.build(memberId, threadId))
 			.retrieve()
-			.bodyToMono(CropStatusResponse.class)
+			.bodyToMono(AiCropStatusResponse.class)
 			.doOnSuccess(res -> log.info("작물 상태 조회 성공: {}", res))
 			.doOnError(e -> log.error("작물 상태 조회 에러: {}", e.getMessage()))
 			.block();
@@ -110,7 +111,7 @@ public class AiService {
 	}
 
 	public void updateThread(String memberId, String threadId, ChatRoomUpdateRequest request) {
-		ThreadUpdateRequest updateRequest = new ThreadUpdateRequest(request.address(),
+		AiThreadUpdateRequest updateRequest = new AiThreadUpdateRequest(request.address(),
 			request.plantedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
 		webClient.patch()

@@ -1,6 +1,6 @@
 package com.farmmate.external.ai.dto.response;
 
-public record ThreadCreateResponse(
+public record AiThreadCreateResponse(
 	String message,
 	ChatRoomData data
 ) {

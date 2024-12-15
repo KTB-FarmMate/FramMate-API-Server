@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record ShortTermForecastResponse(
+public record WeatherStationShortTermForecastResponse(
 	@JsonProperty("response")
 	Response response
 ) {

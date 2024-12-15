@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * 병해충 상세정보 응답
  */
-public record PestDetailResponse(
+public record NcpmsPestDetailResponse(
 
 	@JsonProperty("service") Data data // 병해충 상세정보 응답
 
