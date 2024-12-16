@@ -7,13 +7,13 @@ import com.farmmate.external.ai.dto.response.AiReportingPestsResponse;
 public record CurrentReportingPestsVo(
 	List<String> forecasts,
 	List<String> warnings,
-	List<String> watches
+	List<String> advisories
 ) {
 	public static CurrentReportingPestsVo fromResponse(AiReportingPestsResponse response) {
 		List<String> forecasts = response.data().forecasts();
 		List<String> warnings = response.data().warnings();
-		List<String> watches = response.data().watches();
+		List<String> advisories = response.data().advisories();
 
-		return new CurrentReportingPestsVo(forecasts, warnings, watches);
+		return new CurrentReportingPestsVo(forecasts, warnings, advisories);
 	}
 }
