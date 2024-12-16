@@ -144,10 +144,6 @@ def deployToInstance(instanceCredentialsId, logStream) {
             docker stop api_server || true
             docker rm api_server || true
             docker run -d --env-file /home/ec2-user/.env --name api_server \
-                --log-driver=awslogs \
-                --log-opt awslogs-region=ap-northeast-2 \
-                --log-opt awslogs-group=farmmate-logs \
-                --log-opt awslogs-stream=${logStream} \
                 -p 8080:8080 ${ECR_REPO}:latest
             docker system prune -f
             docker image prune -f
