@@ -76,14 +76,14 @@ pipeline {
                 stage('Deploy to API1') {
                     steps {
                         script {
-                            deployToInstance('api-server', 'nginx-server-api1')
+                            deployToInstance('api-server', 'server-api1')
                         }
                     }
                 }
                 stage('Deploy to API2') {
                     steps {
                         script {
-                            deployToInstance('api-server2', 'nginx-server-api2')
+                            deployToInstance('api-server2', 'server-api2')
                         }
                     }
                 }
