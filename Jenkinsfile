@@ -49,28 +49,6 @@ pipeline {
             }
         }
 
-        stage('Deploy to API1') {
-            steps {
-                withCredentials([
-                    string(credentialsId: 'api-server', variable: 'EC2_INSTANCE_IP')
-                ]) {
-                    sshagent([SSH_CREDENTIALS_ID]) {
-                        sh """
-                        # EC2에서 Docker 컨테이너 실행 시 env-file 포함
-                        ssh -o StrictHostKeyChecking=no ec2-user@${EC2_INSTANCE_IP} '
-                        aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${ECR_REPO}
-                        docker pull ${ECR_REPO}:latest
-                        docker stop api_server || true
-                        docker rm api_server || true
-                        docker run -d --env-file /home/ec2-user/.env --name api_server --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=farmmate-logs --log-opt awslogs-stream=nginx-server-api1 -p 8080:8080 ${ECR_REPO}:latest
-                        docker system prune -f
-                        docker image prune -f
-                        '
-                        """
-                    }
-                }
-            }
-        }
         stage('Deploy to Instances') {
             parallel {
                 stage('Deploy to API1') {
