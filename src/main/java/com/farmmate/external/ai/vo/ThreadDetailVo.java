@@ -18,7 +18,7 @@ public record ThreadDetailVo(String threadId, List<Message> messages) {
 
 	public record Message(Role role, String text) {
 		public static Message fromData(AiThreadDetailResponse.Data.Message message) {
-			return new Message(Role.fromDescription(message.role()), message.text());
+			return new Message(message.role(), message.text());
 		}
 	}
 }
