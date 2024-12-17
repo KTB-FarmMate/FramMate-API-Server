@@ -35,6 +35,8 @@ spring:
   #        schema-locations: classpath:/db/data.sql # 스키마 생성 SQL 파일 위치
   #        data-locations: classpath:/db/data.sql    # 데이터 생성 SQL 파일 위치
 
+  cache:
+    type: redis
   data:
     mongodb:
       uri: mongodb://localhost:27017/farmmate
@@ -50,6 +52,9 @@ logging:
           jdbc:
             bind: trace  # Hibernate 쿼리 파라미터 로깅
       springframework:
+        cache: trace  # Spring Cache 로깅
+        data:
+          redis: trace  # Spring Data Redis 로깅
         web:
           reactive:
             function:
