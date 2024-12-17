@@ -2,7 +2,7 @@ pipeline {
     agent {
         label 'farmmate-api-agent'
     }
-
+ 
     environment {
         REPO = 'KTB-FarmMate/FramMate-API-Server'
         ECR_REPO = '211125697339.dkr.ecr.ap-northeast-2.amazonaws.com/farmmate-api'
