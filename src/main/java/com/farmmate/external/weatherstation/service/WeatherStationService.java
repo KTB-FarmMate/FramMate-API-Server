@@ -25,13 +25,13 @@ public class WeatherStationService {
 		.baseUrl("https://" + HOST)    // FIXME: 추후 bean으로 사용할 수 있도록하기
 		.build();
 
-	@Cacheable(value = "currentWeatherInfo", key = "#nx + #ny")
+	@Cacheable(value = "currentWeatherInfo", key = "(#nx.toString() + #ny.toString()).hashCode()")
 	public NowCastVo getCurrentWeatherInfo(LocalDateTime localDateTime, int nx, int ny) {
 		log.info("Cache Miss: 현재 날씨 조회, nx: {}, ny: {}", nx, ny);
 		return shortTermWeatherService.getCurrentWeatherInfo(webClient, localDateTime, nx, ny);
 	}
 
-	@Cacheable(value = "shortTermForeCast", key = "#nx + #ny")
+	@Cacheable(value = "shortTermForeCast", key = "(#nx.toString() + #ny.toString()).hashCode()")
 	public List<DayForecastVO> getShortTermForeCast(LocalDateTime localDateTime, int nx, int ny) {
 		log.info("Cache Miss: 단기 예보(3일) 조회, nx: {}, ny: {}", nx, ny);
 		return shortTermWeatherService.getShortTermForeCast(webClient, localDateTime, nx, ny);
