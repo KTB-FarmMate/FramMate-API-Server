@@ -48,32 +48,46 @@ public class ShortTermWeatherService {
 
 	// 초단기실황 조회
 	protected NowCastVo getCurrentWeatherInfo(WebClient webClient, LocalDateTime dateTime, int nx, int ny) {
-		String requestBaseDate = dateTime.toLocalDate().toString().replaceAll("-", "");
-		String requestBaseTime = dateTime.toLocalTime().toString().replaceAll(":", "").substring(0, 2) + "00";
+		int retryCount = 3; // 최대 재시도 횟수
 
-		WeatherStationNowCastResponse response = webClient.get()
-			.uri(uriBuilder -> uriBuilder
-				.path(CURRENT_WEATHER_INFO_PATH)
-				.queryParam("pageNo", 1)
-				.queryParam("numOfRows", 50)
-				.queryParam("base_date", requestBaseDate)
-				.queryParam("base_time", requestBaseTime)
-				.queryParam("dataType", "JSON")
-				.queryParam("nx", nx)
-				.queryParam("ny", ny)
-				.queryParam("ServiceKey", API_KEY)
-				.build())
-			.retrieve()
-			.bodyToMono(WeatherStationNowCastResponse.class)
-			.doOnError(e -> {
-				log.error(e.getMessage());
-				throw new RuntimeException("Failed to get short term weather info", e);
-			})
-			.block();
+		LocalDateTime currentDateTime = dateTime;
 
-		assert response != null;
+		for (int i = 0; i < retryCount; i++) {
+			String requestBaseDate = currentDateTime.toLocalDate().toString().replaceAll("-", "");
+			String requestBaseTime = currentDateTime.toLocalTime()
+				.toString()
+				.replaceAll(":", "")
+				.substring(0, 2) + "00";
 
-		return NowCastVo.from(response);
+			dateTime = dateTime.minusHours(1); // 시간을 1시간 전으로 변경
+
+			try {
+				WeatherStationNowCastResponse response = webClient.get()
+					.uri(uriBuilder -> uriBuilder
+						.path(CURRENT_WEATHER_INFO_PATH)
+						.queryParam("pageNo", 1)
+						.queryParam("numOfRows", 50)
+						.queryParam("base_date", requestBaseDate)
+						.queryParam("base_time", requestBaseTime)
+						.queryParam("dataType", "JSON")
+						.queryParam("nx", nx)
+						.queryParam("ny", ny)
+						.queryParam("ServiceKey", API_KEY)
+						.build())
+					.retrieve()
+					.bodyToMono(WeatherStationNowCastResponse.class)
+					.doOnError(e -> log.error(e.getMessage()))
+					.block();
+
+				if (response != null) {
+					return NowCastVo.from(response); // 성공 시 반환
+				}
+			} catch (Exception e) {
+				log.error("Attempt {} failed with base_time: {}", i + 1, requestBaseTime, e);
+			}
+		}
+
+		throw new RuntimeException("Failed to get short term weather info after retries");
 	}
 
 	// 단기예보 조회 (현재로부터 앞으로의 3일간 날씨 조회)

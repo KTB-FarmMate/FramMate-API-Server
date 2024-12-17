@@ -7,9 +7,11 @@ import java.util.Map;
 import com.farmmate.external.weatherstation.dto.response.WeatherStationNowCastResponse;
 import com.farmmate.external.weatherstation.type.PrecipitationType;
 import com.farmmate.external.weatherstation.type.SkyCondition;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import lombok.NonNull;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public record NowCastVo(
 	PrecipitationType precipitationType,    // PTY - 강수형태 코드
 	int humidity,    // REH - 습도

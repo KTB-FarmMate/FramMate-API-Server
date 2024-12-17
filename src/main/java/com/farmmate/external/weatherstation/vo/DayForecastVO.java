@@ -11,10 +11,12 @@ import java.util.stream.Collectors;
 import com.farmmate.external.weatherstation.dto.response.WeatherStationShortTermForecastResponse.Response.Body.Items.Item;
 import com.farmmate.external.weatherstation.type.PrecipitationType;
 import com.farmmate.external.weatherstation.type.SkyCondition;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public record DayForecastVO(
 	LocalDate forecastDate, // 예보 날짜
 	Double maxTemperature, // TMX - 일 최고기온(℃)
@@ -47,6 +49,7 @@ public record DayForecastVO(
 		return new DayForecastVO(forecastDate, maxTemperature, minTemperature, hourForecastInfos);
 	}
 
+	@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 	public record HourForecastInfo(
 		LocalTime fcstTime,
 		int precipitationProbability,    // PCP - 강수확률(%)
