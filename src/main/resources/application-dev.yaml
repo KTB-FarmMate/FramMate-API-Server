@@ -25,3 +25,9 @@ spring:
     mongodb:
       uri: ${MONGODB_ENDPOINT}
       database: ${MONGODB_DB_NAME}
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+  cache:
+    type: redis
