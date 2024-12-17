@@ -3,6 +3,7 @@ package com.farmmate.external.weatherstation.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -24,11 +25,15 @@ public class WeatherStationService {
 		.baseUrl("https://" + HOST)    // FIXME: 추후 bean으로 사용할 수 있도록하기
 		.build();
 
+	@Cacheable(value = "currentWeatherInfo", key = "#nx + #ny")
 	public NowCastVo getCurrentWeatherInfo(LocalDateTime localDateTime, int nx, int ny) {
+		log.info("Cache Miss: 현재 날씨 조회, nx: {}, ny: {}", nx, ny);
 		return shortTermWeatherService.getCurrentWeatherInfo(webClient, localDateTime, nx, ny);
 	}
 
+	@Cacheable(value = "shortTermForeCast", key = "#nx + #ny")
 	public List<DayForecastVO> getShortTermForeCast(LocalDateTime localDateTime, int nx, int ny) {
+		log.info("Cache Miss: 단기 예보(3일) 조회, nx: {}, ny: {}", nx, ny);
 		return shortTermWeatherService.getShortTermForeCast(webClient, localDateTime, nx, ny);
 	}
 }
