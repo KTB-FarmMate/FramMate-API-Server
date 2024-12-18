@@ -38,11 +38,11 @@ public record ShortTermWeatherInfoResponseDto(
 		@Schema(description = "강수형태 코드(없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4))", example = "0")
 		int precipitationTypeCode,
 		@Schema(description = "1시간 강수량(mm)", example = "0")
-		int precipitationAmount,
+		double precipitationAmount,
 		@Schema(description = "습도(%)", example = "50")
 		int humidity,
 		@Schema(description = "1시간 산적설(cm)", example = "0")
-		int snowAmount,
+		double snowAmount,
 		@Schema(description = "하늘상태(맑음(1), 구름조금(2), 구름많음(3), 흐림(4))", example = "1")
 		int skyConditionCode,
 		@Schema(description = "기온(℃)", example = "20")

@@ -52,11 +52,11 @@ public record DayForecastVO(
 	@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 	public record HourForecastInfo(
 		LocalTime fcstTime,
-		int precipitationProbability,    // PCP - 강수확률(%)
+		int precipitationProbability,    // POP - 강수확률(%)
 		PrecipitationType precipitationType,    // PTY - 강수형태(없음(0), 비(1), 비/눈(2), 눈(3), 소나기(4))
-		int precipitationAmount,    // PCP - 1시간 강수량(mm)
+		double precipitationAmount,    // PCP - 1시간 강수량(mm)
 		int humidity, // REH - 습도(%)
-		int snowAmount, // SNO - 1시간 산적설(cm)
+		double snowAmount, // SNO - 1시간 산적설(cm)
 		SkyCondition skyCondition, // SKY - 하늘상태(맑음(1), 구름조금(2), 구름많음(3), 흐림(4))
 		int temperature // TMP - 1시간 기온(℃)
 	) {
@@ -70,9 +70,9 @@ public record DayForecastVO(
 				fcstTime,
 				Integer.parseInt(itemMap.getOrDefault("POP", "0")),
 				PrecipitationType.fromCode(itemMap.get("PTY")),
-				Integer.parseInt(itemMap.getOrDefault("PCP", "0")),
+				Double.parseDouble(itemMap.getOrDefault("PCP", "0")),
 				Integer.parseInt(itemMap.get("REH")),
-				Integer.parseInt(itemMap.getOrDefault("SNO", "0")),
+				Double.parseDouble(itemMap.getOrDefault("SNO", "0")),
 				SkyCondition.fromCode(itemMap.get("SKY")),
 				Integer.parseInt(itemMap.get("TMP"))
 			);
