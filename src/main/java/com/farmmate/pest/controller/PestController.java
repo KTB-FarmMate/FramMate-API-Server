@@ -27,8 +27,8 @@ public class PestController {
 
 	@Operation(summary = "작물의 발효중인 병충해 목록 조회", description = "사용자가 선택한 작물에 대한 병충해 상세 정보를 조회합니다.")
 	@GetMapping("/pests")
-	public CurrentReportingPestsResponse getReportingPests(@RequestParam String cropName) {
-		return pestService.getCurrentReportingPests(cropName);
+	public CurrentReportingPestsResponse getReportingPests(@RequestParam Integer cropId) {
+		return pestService.getCurrentReportingPests(cropId);
 	}
 
 }

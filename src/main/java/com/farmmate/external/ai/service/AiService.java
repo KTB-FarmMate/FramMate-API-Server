@@ -137,7 +137,10 @@ public class AiService {
 			.retrieve()
 			.bodyToMono(AiReportingPestsResponse.class)
 			.doOnSuccess(res -> log.info("해충 정보 조회 성공: {}", res))
-			.doOnError(e -> log.error("해충 정보 조회 에러: {}", e.getMessage()))
+			.doOnError(e -> {
+				log.error("해충 정보 조회 에러: {}", e.getMessage());
+				throw new IllegalArgumentException("외부  " + e.getMessage());
+			})
 			.block();
 
 		return CurrentReportingPestsVo.fromResponse(response);
