@@ -24,7 +24,7 @@ public record DayForecastVO(
 	List<HourForecastInfo> hourForecastInfos    // 해당 일의 시간별 정보
 ) {
 	public static DayForecastVO from(LocalDate forecastDate, List<Item> items) {
-		log.info("forecastDate: {}", forecastDate);
+		//log.info("forecastDate: {}", forecastDate);
 		Double maxTemperature = null;
 		Double minTemperature = null;
 
@@ -62,7 +62,7 @@ public record DayForecastVO(
 	) {
 		public static HourForecastInfo from(LocalTime fcstTime, List<Item> items) {
 
-			log.info("fcstTime: {}", fcstTime);
+			// log.info("fcstTime: {}", fcstTime);
 			Map<String, String> itemMap = items.stream()
 				.collect(Collectors.toMap(Item::category, Item::fcstValue));
 
