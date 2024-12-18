@@ -37,7 +37,7 @@ public class AiService {
 	@PostConstruct
 	public void init() {
 		DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(API_URL);
-		uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+		// uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 		this.webClient = WebClient.builder()
 			.uriBuilderFactory(uriBuilderFactory)
 			.defaultHeader("Content-Type", "application/json")
@@ -137,10 +137,7 @@ public class AiService {
 			.retrieve()
 			.bodyToMono(AiReportingPestsResponse.class)
 			.doOnSuccess(res -> log.info("해충 정보 조회 성공: {}", res))
-			.doOnError(e -> {
-				log.error("해충 정보 조회 에러: {}", e.getMessage());
-				throw new IllegalArgumentException("외부  " + e.getMessage());
-			})
+			.doOnError(e -> log.error("해충 정보 조회 에러: {}", e.getMessage()))
 			.block();
 
 		return CurrentReportingPestsVo.fromResponse(response);
