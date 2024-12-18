@@ -1,6 +1,7 @@
 package com.farmmate.external.kakaolocal.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -22,6 +23,7 @@ public class KakaoLocalService {
 		.build();
 
 	// 주소를 통해서 좌표 변환
+	@Cacheable(value = "address2coordinate", key = "#address")
 	public CoordinateVO convertAddress2Coordinate(String address) {
 		KakaoLocalGeocodeResponse response = webClient.get()
 			.uri(uriBuilder -> uriBuilder
